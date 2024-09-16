@@ -1,6 +1,6 @@
+import 'package:chai/app/router/router.dart';
 import 'package:chai/app/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:chai/app/screens/home.dart';
 
 void main() {
   runApp(const App());
@@ -11,10 +11,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Chai',
       theme: GlobalThemeData.defaultTheme,
-      home: const HomePage(title: 'Chai Solutions'),
+      routerConfig: router,
     );
   }
 }

@@ -19,12 +19,17 @@ class GlobalThemeData {
       appBarTheme: const AppBarTheme(
         foregroundColor: lightText,
         backgroundColor: secondaryBackground,
+        scrolledUnderElevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       colorScheme: colorScheme,
       canvasColor: colorScheme.surface,
       scaffoldBackgroundColor: colorScheme.surface,
       cardColor: tertiary,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: secondaryBackground,
+        selectedItemColor: primary,
+      ),
     );
   }
 
