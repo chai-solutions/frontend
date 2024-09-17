@@ -1,10 +1,16 @@
+import 'package:chai/providers/riverpod_logger.dart';
 import 'package:chai/app/router/router.dart';
 import 'package:chai/app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const ProviderScope(child: App()));
+  runApp(
+    ProviderScope(
+      observers: [RiverpodLogger()],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
