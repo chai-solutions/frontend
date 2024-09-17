@@ -1,4 +1,4 @@
-package com.example.chai
+package org.chai_solutions.chai
 
 import io.flutter.embedding.android.FlutterActivity
 
