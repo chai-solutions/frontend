@@ -37,6 +37,7 @@ class GlobalThemeData {
     primary: primary,
     secondary: secondary,
     surface: background,
+    surfaceBright: secondaryBackground,
     tertiary: tertiary,
     error: error,
     onError: lightText,
