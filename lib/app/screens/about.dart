@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PersonRecord {
   final String name;
@@ -39,7 +40,7 @@ class VarunExtraInfo extends StatelessWidget {
               style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  print(
+                  launchUrlString(
                       'https://raw.githubusercontent.com/water-sucks/resume/main/resume.pdf');
                 },
             ),
