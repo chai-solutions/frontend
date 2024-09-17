@@ -6,7 +6,7 @@ part of 'hello.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getHelloHash() => r'926eb5fecb1e89868458d8fa863652c6748f8318';
+String _$getHelloHash() => r'725790d0caa3f1ad683e30adeabf328c9f78529f';
 
 /// See also [getHello].
 @ProviderFor(getHello)

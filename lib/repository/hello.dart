@@ -10,7 +10,7 @@ part 'hello.g.dart';
 Future<HelloResponse> getHello(GetHelloRef ref) async {
   final client = ref.watch(httpClientProvider);
   final response = await client.get('/hello');
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(milliseconds: 500));
   final json = jsonDecode(response.body) as Map<String, dynamic>;
   return HelloResponse.fromJson(json);
 }
