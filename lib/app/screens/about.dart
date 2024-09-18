@@ -66,6 +66,32 @@ class VarunExtraInfo extends StatelessWidget {
   }
 }
 
+class VigneshExtraInfo extends StatelessWidget {
+  const VigneshExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('The sea, my friends, does not dream of you...'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "My name is Vignesh Guruswami. I am a senior in SF State majoring in Computer Science with a minor in Physics. My work tends on aerospace and embedded systems, but I am proficient in full-stack development and software engineering. I will be the backend lead for this project.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ]);
+  }
+}
+
 class MattExtraInfo extends StatelessWidget {
 const MattExtraInfo({super.key});
 
@@ -121,7 +147,7 @@ final List<PersonRecord> teamMembers = [
     name: "Vignesh Guruswami",
     role: "Backend Lead Engineer",
     image: Image.asset('assets/images/whale.png', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const VigneshExtraInfo(),
   ),
   PersonRecord(
     name: "Thamizarasu Sankara",
