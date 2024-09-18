@@ -206,7 +206,7 @@ final List<PersonRecord> teamMembers = [
     name: "Justin Doi",
     role: "Full-Stack Engineer",
     image: Image.asset('assets/images/justin.jpg', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const JustinExtraInfo(),
   )
 ];
 
