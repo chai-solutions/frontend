@@ -65,6 +65,42 @@ class VarunExtraInfo extends StatelessWidget {
     ]);
   }
 }
+// Thamizarasu's about blurb
+class ThamizarasuExtraInfo extends StatelessWidget {
+  const ThamizarasuExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('Philliphians 4:13: "I can do all things through Christ who strengthens me."'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "What's up! My name is Thamizarasu Sankara, but you guys can call me Tamil. I am a senior at SF State. I'm majoring in Computer Science. Fun fact...my name is also the language I speak at home. Also the state of India I'm from is Tamil Nadu.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10),
+      RichText(
+        text: TextSpan(
+            text:
+                "I also love music; I play the drums, and can compose as well. And in a surprising turn of events, I also love watching football (Raider Nation 4 Life!)",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
+        textAlign: TextAlign.center,
+      ),
+    ]);
+  }
+}
 
 class VigneshExtraInfo extends StatelessWidget {
   const VigneshExtraInfo({super.key});
@@ -188,7 +224,7 @@ final List<PersonRecord> teamMembers = [
     name: "Thamizarasu Sankara",
     role: "Full-Stack Engineer/Scrum Master",
     image: Image.asset('assets/images/DoctorLegend.jpg', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const ThamizarasuExtraInfo(),
   ),
   PersonRecord(
     name: "Arjun Bhagat",
