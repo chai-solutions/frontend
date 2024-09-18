@@ -128,6 +128,41 @@ const MattExtraInfo({super.key});
   }
 }
 
+class JustinExtraInfo extends StatelessWidget {
+const JustinExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('So is it any wonder people are afraid of technology? TECNOLOGY!'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "Hello, my name is Justin Doi. I have been at SF State since 2022, majoring in Computer Science. My goal is to one day work on projects meant to help people in some way.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10),
+      RichText(
+        text: TextSpan(
+            text:
+                "I enjoy collecting action figures, building Gundam model kits, and 3D modeling and printing my own action figure designs.",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
+        textAlign: TextAlign.center,
+      ),
+    ]);
+  }
+}
 final List<PersonRecord> teamMembers = [
   PersonRecord(
     name: "Matt Stoffel",
@@ -171,7 +206,7 @@ final List<PersonRecord> teamMembers = [
     name: "Justin Doi",
     role: "Full-Stack Engineer",
     image: Image.asset('assets/images/justin.jpg', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const JustinExtraInfo(),
   )
 ];
 
