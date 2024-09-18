@@ -92,7 +92,7 @@ class ThamizarasuExtraInfo extends StatelessWidget {
       RichText(
         text: TextSpan(
             text:
-                "I also love music; I play the drums, and can compose as well. And in a surprising turn of events, I also love watching football (Raider Nation 4 Life!)",
+                "I also love music; I been playing the piano for about 9 years, and recently got into music production. I'm a multisport athlete and compete hard in any sport. I mainly love watching football and basketball. (DubNation and 49ers Faithful) If you guys ever wanna collaborate with me on a project here's my GitHub: thamizarasus",
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurface,
             )),
