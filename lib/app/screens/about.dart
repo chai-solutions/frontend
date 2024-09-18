@@ -66,6 +66,42 @@ class VarunExtraInfo extends StatelessWidget {
   }
 }
 
+class MattExtraInfo extends StatelessWidget {
+const MattExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('"The more I learn, the more I realize how much I don’t know."'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "Hi, my name is Matt. I’ve developed and published apps on the Apple app store for my own purposes and as a freelancer. I also have experience managing Linux and Solaris servers from my time in the Navy.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10),
+      RichText(
+        text: TextSpan(
+            text:
+                "In my free time I like to work on my little homelab where I learn kubernetes and docker in a low risk environment. I also like to play boradegames and other tabletop games like 40k",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
+        textAlign: TextAlign.center,
+      ),
+    ]);
+  }
+}
+
 final List<PersonRecord> teamMembers = [
   PersonRecord(
     name: "Matt Stoffel",
@@ -73,7 +109,7 @@ final List<PersonRecord> teamMembers = [
     // Fill specifically for Matt's image only, because it looks the
     // most funny that way.
     image: Image.asset('assets/images/matt.png', fit: BoxFit.fill),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const MattExtraInfo(),
   ),
   PersonRecord(
     name: "Varun Narravula",
