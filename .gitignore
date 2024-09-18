@@ -46,3 +46,10 @@ app.*.map.json
 
 # Environment variable files
 .env
+
+# Fastlane
+/android/fastlane/service-key.json
+/ios/fastlane/.env
+/ios/Runner.ipa
+/ios/Runner.app.dSYM.zip
+report.xml
