@@ -1,7 +1,7 @@
 name: chai
-description: "A new Flutter project."
+description: "Chai Solutions app for SFSU CSC-648 capstone project"
 publish_to: "none"
-version: 1.0.0+1
+version: 0.1.0+1
 
 environment:
   sdk: ^3.5.2
