@@ -1,0 +1,12 @@
+default_platform(:android)
+
+platform :android do
+  lane :internal_testing do
+    upload_to_play_store(
+      track: 'internal',
+      package_name: 'org.chai_solutions.chai',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_apk: true,
+    )
+  end
+end
