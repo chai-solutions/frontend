@@ -199,6 +199,44 @@ const JustinExtraInfo({super.key});
     ]);
   }
 }
+
+// RAG INFO
+class RobertExtraInfo extends StatelessWidget {
+const RobertExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('Technology is incredible!'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "I am eager to work on backend development in a team for the first time.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10),
+      RichText(
+        text: TextSpan(
+            text:
+                "I enjoy propagating small plants and mosses. I like white nerve fittonia and fern moss :0",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
+        textAlign: TextAlign.center,
+      ),
+    ]);
+  }
+}
+
 final List<PersonRecord> teamMembers = [
   PersonRecord(
     name: "Matt Stoffel",
@@ -236,7 +274,7 @@ final List<PersonRecord> teamMembers = [
     name: "Robert Ace Gonzales",
     role: "Backend Engineer",
     image: Image.asset('assets/images/robert.png', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    extraInformation: const Text('i <3 the internet'),
   ),
   PersonRecord(
     name: "Justin Doi",
