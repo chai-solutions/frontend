@@ -14,6 +14,7 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
+*.jks
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -41,3 +42,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/key.properties
+
+# Environment variable files
+.env
