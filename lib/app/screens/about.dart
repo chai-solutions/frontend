@@ -130,7 +130,7 @@ class VigneshExtraInfo extends StatelessWidget {
 
 
 class ArjunExtraInfo extends StatelessWidget {
-  const VigneshExtraInfo({super.key});
+  const ArjunExtraInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +143,7 @@ class ArjunExtraInfo extends StatelessWidget {
           children: [
             TextSpan(
               text:
-                  "Hello, my name is Arjun Bhagat and I'm currently in my senior year at SFSU. I attended Cal Poly SLO for computer engineering in 2016 but I wasn't enjoying 
-                  it and decided to take a break from school. I'm back now to complete my B.S. in computer science and hopefully find a carreer in software development.",
+                  "Hello, my name is Arjun Bhagat and I'm currently in my senior year at SFSU. I attended Cal Poly SLO for computer engineering in 2016 but I wasn't enjoying it and decided to take a break from school. I'm back now to complete my B.S. in computer science and hopefully find a carreer in software development.",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
@@ -159,8 +158,7 @@ class ArjunExtraInfo extends StatelessWidget {
           children: [
             TextSpan(
               text:
-                  "Some of my hobbies include backpacks, patches and patch making, and music production. I also love to bowl and play airsoft on the weekends. I've also
-                  worked as an airsoft tech during the pandemic in which I repaired and airsoft guns.",
+                  "Some of my hobbies include backpacks, patches and patch making, and music production. I also love to bowl and play airsoft on the weekends. I've also worked as an airsoft tech during the pandemic in which I repaired and airsoft guns.",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
