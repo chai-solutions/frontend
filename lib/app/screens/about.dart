@@ -128,7 +128,6 @@ class VigneshExtraInfo extends StatelessWidget {
   }
 }
 
-
 class ArjunExtraInfo extends StatelessWidget {
   const ArjunExtraInfo({super.key});
 
@@ -242,7 +241,6 @@ const JustinExtraInfo({super.key});
   }
 }
 
-// RAG INFO
 class RobertExtraInfo extends StatelessWidget {
 const RobertExtraInfo({super.key});
 
