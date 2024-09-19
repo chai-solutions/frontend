@@ -128,6 +128,48 @@ class VigneshExtraInfo extends StatelessWidget {
   }
 }
 
+
+class ArjunExtraInfo extends StatelessWidget {
+  const ArjunExtraInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const Text('Imagination, an open mind, and the courage to challenge the status quo are the basic ingredients for every innovation'),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "Hello, my name is Arjun Bhagat and I'm currently in my senior year at SFSU. I attended Cal Poly SLO for computer engineering in 2016 but I wasn't enjoying it and decided to take a break from school. I'm back now to complete my B.S. in computer science and hopefully find a carreer in software development.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10),
+      RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  "Some of my hobbies include backpacks, patches and patch making, and music production. I also love to bowl and play airsoft on the weekends. I've also worked as an airsoft tech during the pandemic in which I repaired and airsoft guns.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ]);
+  }
+}
+
 class MattExtraInfo extends StatelessWidget {
 const MattExtraInfo({super.key});
 
@@ -229,8 +271,8 @@ final List<PersonRecord> teamMembers = [
   PersonRecord(
     name: "Arjun Bhagat",
     role: "Frontend Engineer",
-    image: Image.asset('assets/images/trollface.png', fit: BoxFit.cover),
-    extraInformation: const Text('goodbye, cruel world!'),
+    image: Image.asset('assets/images/arj.jpg', fit: BoxFit.cover),
+    extraInformation: const ArjunExtraInfo(),
   ),
   PersonRecord(
     name: "Robert Ace Gonzales",
