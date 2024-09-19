@@ -65,6 +65,7 @@ class VarunExtraInfo extends StatelessWidget {
     ]);
   }
 }
+
 // Thamizarasu's about blurb
 class ThamizarasuExtraInfo extends StatelessWidget {
   const ThamizarasuExtraInfo({super.key});
@@ -72,7 +73,8 @@ class ThamizarasuExtraInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text('Philliphians 4:13: "I can do all things through Christ who strengthens me."'),
+      const Text(
+          'Philliphians 4:13: "I can do all things through Christ who strengthens me."'),
       const SizedBox(height: 10),
       RichText(
         textAlign: TextAlign.center,
@@ -134,7 +136,8 @@ class ArjunExtraInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text('Imagination, an open mind, and the courage to challenge the status quo are the basic ingredients for every innovation'),
+      const Text(
+          'Imagination, an open mind, and the courage to challenge the status quo are the basic ingredients for every innovation'),
       const SizedBox(height: 10),
       RichText(
         textAlign: TextAlign.center,
@@ -170,12 +173,13 @@ class ArjunExtraInfo extends StatelessWidget {
 }
 
 class MattExtraInfo extends StatelessWidget {
-const MattExtraInfo({super.key});
+  const MattExtraInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text('"The more I learn, the more I realize how much I don’t know."'),
+      const Text(
+          '"The more I learn, the more I realize how much I don’t know."'),
       const SizedBox(height: 10),
       RichText(
         textAlign: TextAlign.center,
@@ -206,12 +210,13 @@ const MattExtraInfo({super.key});
 }
 
 class JustinExtraInfo extends StatelessWidget {
-const JustinExtraInfo({super.key});
+  const JustinExtraInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text('So is it any wonder people are afraid of technology? TECNOLOGY!'),
+      const Text(
+          'So is it any wonder people are afraid of technology? TECNOLOGY!'),
       const SizedBox(height: 10),
       RichText(
         textAlign: TextAlign.center,
@@ -242,7 +247,7 @@ const JustinExtraInfo({super.key});
 }
 
 class RobertExtraInfo extends StatelessWidget {
-const RobertExtraInfo({super.key});
+  const RobertExtraInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -325,7 +330,17 @@ final List<PersonRecord> teamMembers = [
 ];
 
 const groupDescription =
-    "We are Chai Solutions, a group that came into existence for a software engineering class at our university: specifically, CSC-648 at San Francisco State University. Our group came together during the Fall 2024 semester, in Dr. Isabel Hyo Jung Song's Section 04; internally we are Team #5. As a part of this class, Chai Solutions showcases the expertise and methodologies applied to real-world development challenges, and demonstrates our ability to architect, design, and implement complex software systems.";
+    "We are Chai Solutions, a group that came into existence"
+    "for a software engineering class at our university: "
+    "specifically, CSC-648 at San Francisco State University. "
+    "Our group came together during the Fall 2024 semester, in "
+    "Dr. Isabel Hyo Jung Song's Section 04; internally we are "
+    "Team #5. As a part of this class, Chai Solutions showcases "
+    "the expertise and methodologies applied to real-world development "
+    "challenges, and demonstrates our ability to architect, design, "
+    "and implement complex software systems.\n\n"
+    "We meet two days a week: on Wednesdays in person, and on Fridays "
+    "using a private Discord server used for all internal communications.";
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
