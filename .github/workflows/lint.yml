@@ -25,6 +25,9 @@ jobs:
       - name: Fetch dependencies
         run: flutter pub get
 
+      - name: Create empty .env
+        run: touch .env
+
       - name: "Run `flutter analyze`"
         uses: zgosalvez/github-actions-analyze-dart@v2
   test:
@@ -39,6 +42,9 @@ jobs:
         with:
           flutter-version-file: pubspec.yaml
           cache: true
+
+      - name: Create empty .env
+        run: touch .env
 
       - name: "Run `flutter test`"
         run: flutter test

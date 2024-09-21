@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chai/utils/env.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -6,11 +7,7 @@ part 'http_client.g.dart';
 
 @Riverpod(dependencies: [])
 Client httpClient(HttpClientRef ref) {
-  const baseUrl = String.fromEnvironment('BASE_URL');
-  if (baseUrl.isEmpty) {
-    throw Exception('BASE_URL is empty, this must be specified');
-  }
-
+  final baseUrl = Env().baseURL;
   return Client(baseUrl: baseUrl);
 }
 

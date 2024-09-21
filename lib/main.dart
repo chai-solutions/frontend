@@ -1,10 +1,13 @@
 import 'package:chai/providers/riverpod_logger.dart';
 import 'package:chai/app/router/router.dart';
 import 'package:chai/app/theme.dart';
+import 'package:chai/utils/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
+  await Env.init();
+
   runApp(
     ProviderScope(
       observers: [RiverpodLogger()],
