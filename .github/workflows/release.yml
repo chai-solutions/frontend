@@ -30,6 +30,8 @@ jobs:
         run: flutter pub get
 
       - name: Create .env
+        env:
+          PROD_API_URL: ${{ secrets.PROD_API_URL }}
         run: |
           touch .env
           echo "BASE_URL=$PROD_API_URL" >> .env
@@ -75,6 +77,8 @@ jobs:
           distribution: "temurin"
 
       - name: Create .env
+        env:
+          PROD_API_URL: ${{ secrets.PROD_API_URL }}
         run: |
           touch .env
           echo "BASE_URL=$PROD_API_URL" >> .env
