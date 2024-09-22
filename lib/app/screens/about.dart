@@ -387,6 +387,19 @@ class AboutPage extends StatelessWidget {
                   )
                   .toList(),
             ),
+            const SizedBox(height: 10),
+            Center(
+              child: InkWell(
+                child: Text(
+                  'Privacy Policy',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  launchUrlString('https://chai-solutions.org/privacy');
+                },
+              ),
+            ),
           ],
         ),
       ),
