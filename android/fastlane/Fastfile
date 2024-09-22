@@ -2,6 +2,17 @@ default_platform(:android)
 
 platform :android do
   lane :internal_testing do
+    internal_version_codes = google_play_track_version_codes(track: 'internal')
+    version_code = internal_version_codes.max + 1
+
+    if is_ci
+      UI.message("CI detected. Setting up CI environment")
+      setup_ci
+    end
+
+    root_dir = sh("git rev-parse --show-toplevel").strip
+    sh("cd #{root_dir} && flutter build appbundle --build-number #{version_code}")
+
     upload_to_play_store(
       track: 'internal',
       package_name: 'org.chai_solutions.chai',

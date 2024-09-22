@@ -1,0 +1,102 @@
+name: Release
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  RUBY_VERSION: "3.2.2"
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: ios/
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: pubspec.yaml
+          cache: true
+
+      - name: Fetch dependencies
+        run: flutter pub get
+
+      - name: Create .env
+        run: |
+          touch .env
+          echo "BASE_URL=$PROD_API_URL" >> .env
+
+      - name: Add Fastlane Git access key to SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.FASTLANE_SSH_SECRET_KEY }}
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "internal_testing"
+          subdirectory: ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: android/
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: pubspec.yaml
+          cache: true
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: "temurin"
+
+      - name: Create .env
+        run: |
+          touch .env
+          echo "BASE_URL=$PROD_API_URL" >> .env
+
+      - name: Create service account key
+        run: |
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY_BASE64 }}" | base64 --decode > android/fastlane/service-key.json
+
+      - name: Create keystore.jks
+        run: |
+          echo "${{ secrets.ANDROID_KEY_STORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << EOF
+          storePassword=${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyAlias=upload
+          storeFile=keystore.jks
+          EOF
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "internal_testing"
+          subdirectory: android
