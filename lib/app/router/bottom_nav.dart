@@ -1,6 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:collection/collection.dart';
 
 /// Builds the "shell" for the app by building a Scaffold with a
 /// BottomNavigationBar, where [child] is placed in the body of the Scaffold.
@@ -12,7 +12,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
   }) : super(key: key ?? const ValueKey<String>('ScaffoldWithNavBar'));
 
   final StatefulNavigationShell navigationShell;
-
   final List<Widget> children;
 
   @override
@@ -34,11 +33,11 @@ class ScaffoldWithNavBar extends StatelessWidget {
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.coffee_rounded), label: 'About'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.login), label: 'Login'), // Added Login
             ],
             currentIndex: navigationShell.currentIndex,
             onTap: (int index) => _onTap(context, index),
-            // These are hardcoded in the bottom bar source code; hardcoding here
-            // as well to make sure the font size does not change upon selection.
             unselectedFontSize: 14.0,
             selectedFontSize: 14.0,
           ),
@@ -48,10 +47,16 @@ class ScaffoldWithNavBar extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
-    );
+    if (index == 2) {
+      // If the login button is tapped, navigate to the login screen
+      context.push('/login');
+    } else {
+      // Handle navigation between Home and About tabs
+      navigationShell.goBranch(
+        index,
+        initialLocation: index == navigationShell.currentIndex,
+      );
+    }
   }
 }
 
