@@ -1,88 +1,166 @@
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/models.dart';
-import 'package:chai/providers/package_info.dart';
-import 'package:chai/repository/hello.dart';
+import 'package:chai/models/flight_plan/flight_plan.dart';
+import 'package:chai/repository/flight_plan.dart';
+import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background2.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: constraints.maxHeight * 0.2,
+                    child: Stack(
+                      children: [
+                        // Title message in the center
+                        Positioned(
+                          left: 16.0,
+                          bottom: 16.0,
+                          // child:
+                          child: user.maybeWhen(
+                            data: (u) {
+                              return Text(
+                                'Welcome, ${u.name}!',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            },
+                            orElse: () => const SizedBox.shrink(),
+                          ),
+                        ),
+                        // Notifications icon and circular image at the top right
+                        Positioned(
+                          right: 16.0,
+                          top: 16.0,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.notifications,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                              const SizedBox(width: 8.0),
+                              CircleAvatar(
+                                backgroundColor:
+                                    user.hasValue ? null : Colors.grey,
+                                backgroundImage: user.maybeWhen(
+                                  data: (u) {
+                                    final component =
+                                        Uri.encodeComponent(u.name);
+                                    return NetworkImage(
+                                        "https://ui-avatars.com/api/?name=$component");
+                                  },
+                                  orElse: () => null,
+                                ),
+                                radius: 20.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: constraints.maxHeight * 0.8,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                    ),
+                    child: const FlightPlanList(),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class FlightPlanList extends ConsumerWidget {
+  const FlightPlanList({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chai Solutions'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Consumer(
-              builder: (context, ref, child) {
-                final AsyncValue<HelloResponse> res =
-                    ref.watch(getHelloProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final flightPlans = ref.watch(flightPlanListProvider);
 
-                return switch (res) {
-                  AsyncData(:final value) => Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          value.message,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text('Your random number is: ${value.number}'),
-                      ],
-                    ),
-                  AsyncError() => const Text('something went wrong'),
-                  _ => const CircularProgressIndicator(),
-                };
-              },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 30, bottom: 1, left: 16),
+          child: Text(
+            'My Trips',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22.0,
+              fontWeight: FontWeight.bold,
             ),
-            Consumer(
-              builder: (context, ref, child) {
-                final AsyncValue<PackageInfo> packageInfo =
-                    ref.watch(packageInfoProvider);
-
-                return switch (packageInfo) {
-                  AsyncData(:final value) => Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          'Version: ${value.version}+${value.buildNumber}',
-                          style: const TextStyle(
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                  _ => const SizedBox.shrink(),
-                };
-              },
+          ),
+        ),
+        flightPlans.when(
+          data: (d) => _planList(d),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, __) => const Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error, color: Colors.red),
+                  Text('An error has occurred.',
+                      style: TextStyle(color: Colors.red)),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                infoToast(
-                  context: context,
-                  title: "Success!",
-                  message: "This is a test notification.",
-                  icon: const Icon(Icons.flutter_dash),
-                );
-              },
-              child: const Text('Toast me.'),
-            ),
-            Consumer(builder: (context, ref, child) {
-              return ElevatedButton(
+          ),
+        ),
+        // Row of buttons at the bottom
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  warningToast(
+                    context: context,
+                    title: 'Unimplemented',
+                    message: "We'll get around to this soon!",
+                  );
+                },
+                child: const Text('Add Plan'),
+              ),
+              ElevatedButton(
                 onPressed: () async {
                   final authController =
                       ref.read(authControllerProvider.notifier);
@@ -92,29 +170,44 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 child: const Text('Logout'),
-              );
-            })
-          ],
-        ),
-      ),
-      floatingActionButton: Consumer(
-        builder: (context, ref, child) {
-          final res = ref.watch(getHelloProvider);
-
-          if (res.isRefreshing) {
-            return FloatingActionButton(
-              onPressed: () {},
-              tooltip: 'Refreshing...',
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.tertiary,
               ),
-            );
-          }
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-          return FloatingActionButton(
-            onPressed: () => ref.refresh(getHelloProvider),
-            tooltip: 'Increment',
-            child: const Icon(Icons.refresh),
+  Widget _planList(List<FlightPlan> plans) {
+    if (plans.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text(
+            'No flight plans have been made.',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: plans.length,
+        itemBuilder: (context, index) {
+          final plan = plans[index];
+          final startDate =
+              DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
+          final departureTime =
+              DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
+
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ListTile(
+              title: Text(startDate),
+              subtitle: Text(
+                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+              trailing: const Icon(Icons.arrow_forward),
+            ),
           );
         },
       ),
