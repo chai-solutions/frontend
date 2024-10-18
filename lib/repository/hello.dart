@@ -6,7 +6,7 @@ import 'package:chai/models/models.dart';
 
 part 'hello.g.dart';
 
-@Riverpod(dependencies: [httpClient])
+@riverpod
 Future<HelloResponse> getHello(GetHelloRef ref) async {
   final client = ref.watch(httpClientProvider);
   final response = await client.get('/hello');

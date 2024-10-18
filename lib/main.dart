@@ -9,6 +9,8 @@ import 'package:talker_riverpod_logger/talker_riverpod_logger_observer.dart';
 void main() async {
   await Env.init();
 
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     ProviderScope(
       observers: [
@@ -19,11 +21,13 @@ void main() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       title: 'Chai',
       theme: GlobalThemeData.defaultTheme,
