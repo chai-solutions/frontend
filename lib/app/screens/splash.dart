@@ -23,7 +23,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (status == AuthStatus.loggedIn) {
       if (mounted) {
-        context.go('/home');
+        context.replace('/home');
       }
     }
   }

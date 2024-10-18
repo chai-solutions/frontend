@@ -1,3 +1,4 @@
+import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -195,7 +196,13 @@ class LoginScreenState extends State<LoginScreen> {
 
       if (errorMessage == null) {
         if (context.mounted) {
-          context.go('/home');
+          infoToast(
+            context: context,
+            title: 'Welcome!',
+            message: 'You are now logged in.',
+            icon: const Icon(Icons.flight_takeoff),
+          );
+          context.replace('/home');
         }
       } else {
         setState(() {

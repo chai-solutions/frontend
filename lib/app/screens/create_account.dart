@@ -1,3 +1,4 @@
+import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/controllers/create_account.dart';
 import 'package:flutter/material.dart';
@@ -244,7 +245,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
       if (errorMessage == null) {
         if (context.mounted) {
-          // TODO: show toast saying good job lmfao
+          infoToast(
+            context: context,
+            title: 'Account creation successful!',
+            message: 'You may now log in.',
+          );
           context.replace('/login');
         }
       } else {
