@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'secure_storage.dart';
+part of 'create_account.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$secureStorageHash() => r'84cf314be1c9002b7a6f7d3c6b4b69f08551c575';
+String _$createAccountControllerHash() =>
+    r'a001172a2a0a0d55c58a1ff1715b7c5fb9a49b5c';
 
-/// See also [SecureStorage].
-@ProviderFor(SecureStorage)
-final secureStorageProvider = AutoDisposeAsyncNotifierProvider<SecureStorage,
-    Map<SecureStorageKeys, String?>>.internal(
-  SecureStorage.new,
-  name: r'secureStorageProvider',
+/// See also [CreateAccountController].
+@ProviderFor(CreateAccountController)
+final createAccountControllerProvider =
+    AutoDisposeAsyncNotifierProvider<CreateAccountController, void>.internal(
+  CreateAccountController.new,
+  name: r'createAccountControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$secureStorageHash,
+      : _$createAccountControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SecureStorage
-    = AutoDisposeAsyncNotifier<Map<SecureStorageKeys, String?>>;
+typedef _$CreateAccountController = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

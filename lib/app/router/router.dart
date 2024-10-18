@@ -1,5 +1,6 @@
+import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
-import 'package:chai/app/screens/login_screen.dart';
+import 'package:chai/app/screens/login.dart';
 import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,6 +21,12 @@ GoRouter router(RouterRef ref) {
         path: '/login',
         builder: (context, state) {
           return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/create-account',
+        builder: (context, state) {
+          return const CreateAccountScreen();
         },
       ),
       GoRoute(
