@@ -1,9 +1,12 @@
+import 'package:chai/app/widgets/toasts.dart';
+import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/models.dart';
 import 'package:chai/providers/package_info.dart';
 import 'package:chai/repository/hello.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -66,7 +69,31 @@ class _HomePageState extends State<HomePage> {
                   _ => const SizedBox.shrink(),
                 };
               },
-            )
+            ),
+            ElevatedButton(
+              onPressed: () {
+                infoToast(
+                  context: context,
+                  title: "Success!",
+                  message: "This is a test notification.",
+                  icon: const Icon(Icons.flutter_dash),
+                );
+              },
+              child: const Text('Toast me.'),
+            ),
+            Consumer(builder: (context, ref, child) {
+              return ElevatedButton(
+                onPressed: () async {
+                  final authController =
+                      ref.read(authControllerProvider.notifier);
+                  await authController.logout();
+                  if (context.mounted) {
+                    context.replace('/login');
+                  }
+                },
+                child: const Text('Logout'),
+              );
+            })
           ],
         ),
       ),

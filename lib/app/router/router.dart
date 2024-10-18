@@ -1,34 +1,40 @@
-import 'package:chai/app/screens/about.dart';
+import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
+import 'package:chai/app/screens/login.dart';
+import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'bottom_nav.dart';
+part 'router.g.dart';
 
-final router = GoRouter(
-  routes: <RouteBase>[
-    StatefulShellRoute(
-      builder: (context, state, shell) => shell,
-      navigatorContainerBuilder: (context, shell, children) {
-        return ScaffoldWithNavBar(navigationShell: shell, children: children);
-      },
-      branches: <StatefulShellBranch>[
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/',
-              builder: (context, state) => const HomePage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/about',
-              builder: (context, state) => const AboutPage(),
-            ),
-          ],
-        ),
-      ],
-    ),
-  ],
-);
+@riverpod
+GoRouter router(RouterRef ref) {
+  return GoRouter(
+    routes: <RouteBase>[
+      GoRoute(
+        path: '/',
+        builder: (context, state) {
+          return const SplashScreen();
+        },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) {
+          return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/create-account',
+        builder: (context, state) {
+          return const CreateAccountScreen();
+        },
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) {
+          return const HomePage();
+        },
+      )
+    ],
+  );
+}

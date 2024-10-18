@@ -6,7 +6,7 @@ part of 'hello.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getHelloHash() => r'725790d0caa3f1ad683e30adeabf328c9f78529f';
+String _$getHelloHash() => r'a40d33ed7af097f0d373eaa0bc558a153669bb55';
 
 /// See also [getHello].
 @ProviderFor(getHello)
@@ -15,11 +15,8 @@ final getHelloProvider = AutoDisposeFutureProvider<HelloResponse>.internal(
   name: r'getHelloProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$getHelloHash,
-  dependencies: <ProviderOrFamily>[httpClientProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    httpClientProvider,
-    ...?httpClientProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
 typedef GetHelloRef = AutoDisposeFutureProviderRef<HelloResponse>;

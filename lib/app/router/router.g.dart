@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'http_client.dart';
+part of 'router.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$httpClientHash() => r'876c690ac7a74733648b44c60041e6d793772cda';
+String _$routerHash() => r'4bc9761c106f1e248b16398739ef6386b41320d8';
 
-/// See also [httpClient].
-@ProviderFor(httpClient)
-final httpClientProvider = AutoDisposeProvider<HttpClient>.internal(
-  httpClient,
-  name: r'httpClientProvider',
+/// See also [router].
+@ProviderFor(router)
+final routerProvider = AutoDisposeProvider<GoRouter>.internal(
+  router,
+  name: r'routerProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$httpClientHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$routerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef HttpClientRef = AutoDisposeProviderRef<HttpClient>;
+typedef RouterRef = AutoDisposeProviderRef<GoRouter>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
