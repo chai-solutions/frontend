@@ -1,3 +1,4 @@
+import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
@@ -150,7 +151,7 @@ class FlightPlanList extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
+              GSButton(
                 onPressed: () {
                   warningToast(
                     context: context,
@@ -158,9 +159,9 @@ class FlightPlanList extends ConsumerWidget {
                     message: "We'll get around to this soon!",
                   );
                 },
-                child: const Text('Add Plan'),
+                text: 'Add Plan',
               ),
-              ElevatedButton(
+              GSButton(
                 onPressed: () async {
                   final authController =
                       ref.read(authControllerProvider.notifier);
@@ -169,7 +170,7 @@ class FlightPlanList extends ConsumerWidget {
                     context.replace('/login');
                   }
                 },
-                child: const Text('Logout'),
+                text: 'Logout',
               ),
             ],
           ),

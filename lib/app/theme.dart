@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-const Color primary = Color(0xFFF37125);
-const Color secondary = Color(0xFFFED766);
+const Color primary = Color(0xFF148FC5);
+const Color secondary = Color(0xABABABAB);
 const Color tertiary = Color(0xFFC1839F);
-const Color error = Color(0xFF8C001A);
+const Color error = Color(0xFFAB0807);
 
-const Color lightText = Color(0xFFE6E6EA);
-const Color darkText = Color(0xFF3A405A);
+const Color primaryText = Color(0xFFFFFFFF);
+const Color secondaryText = Color(0xFF148FC5);
 
-const Color background = Color(0xFF121212);
-const Color secondaryBackground = Color(0xFF343434);
+const Color background = Color(0xFF242424);
+const Color secondaryBackground = Color(0xFF424242);
 
 class GlobalThemeData {
   static ThemeData defaultTheme = themeData(darkColorScheme);
 
   static ThemeData themeData(ColorScheme colorScheme) {
-    return ThemeData(
+    final baseTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        foregroundColor: lightText,
+        foregroundColor: primaryText,
         backgroundColor: secondaryBackground,
         scrolledUnderElevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -31,6 +32,22 @@ class GlobalThemeData {
         selectedItemColor: primary,
       ),
     );
+
+    final defaultTextTheme = baseTheme.textTheme;
+
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.ibmPlexSansTextTheme(defaultTextTheme).copyWith(
+        headlineLarge:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineLarge),
+        headlineMedium:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineMedium),
+        headlineSmall:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineSmall),
+        titleLarge: GoogleFonts.cairo(textStyle: defaultTextTheme.titleLarge),
+        titleMedium: GoogleFonts.cairo(textStyle: defaultTextTheme.titleMedium),
+        titleSmall: GoogleFonts.cairo(textStyle: defaultTextTheme.titleSmall),
+      ),
+    );
   }
 
   static const ColorScheme darkColorScheme = ColorScheme(
@@ -40,10 +57,10 @@ class GlobalThemeData {
     surfaceBright: secondaryBackground,
     tertiary: tertiary,
     error: error,
-    onError: lightText,
-    onPrimary: lightText,
-    onSecondary: darkText,
-    onSurface: lightText,
+    onError: primaryText,
+    onPrimary: primaryText,
+    onSecondary: secondaryText,
+    onSurface: primaryText,
     brightness: Brightness.dark,
   );
 }

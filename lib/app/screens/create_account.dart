@@ -1,3 +1,5 @@
+import 'package:chai/app/widgets/buttons.dart';
+import 'package:chai/app/widgets/text_field.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/controllers/create_account.dart';
@@ -24,7 +26,7 @@ class CreateAccountScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.blue[800], // Card background color
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               width: 300,
@@ -67,11 +69,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             'Create Account',
             style: TextStyle(
               fontSize: 22,
-              color: Colors.white,
             ),
           ),
           const SizedBox(height: 20),
-          TextFormField(
+          GSTextFormField(
             controller: _nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -79,20 +80,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               }
               return null;
             },
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Full Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+            placeholder: 'Full Name',
           ),
           const SizedBox(height: 10),
-          TextFormField(
+          GSTextFormField(
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -102,20 +93,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               }
               return null;
             },
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Email',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+            placeholder: 'Email',
           ),
           const SizedBox(height: 10),
-          TextFormField(
+          GSTextFormField(
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -126,21 +107,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               }
               return null;
             },
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-            obscureText: true,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Password',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+            placeholder: 'Passwordl',
+            concealed: true,
           ),
           const SizedBox(height: 10),
-          TextFormField(
+          GSTextFormField(
             controller: _confirmPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -154,36 +125,23 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               }
               return null;
             },
-            obscureText: true,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Confirm password',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+            placeholder: 'Confirm password',
+            concealed: true,
           ),
           const SizedBox(height: 10),
           Consumer(
             builder: (context, ref, child) {
               final authStatus = ref.watch(authControllerProvider);
 
-              return ElevatedButton(
-                onPressed: () => _submit(context, ref),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size(double.infinity, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              return SizedBox(
+                width: double.infinity,
+                child: GSButton(
+                  buttonType: GSButtonType.primary,
+                  onPressed: () => _submit(context, ref),
+                  changeDisableColor: !authStatus.isLoading,
+                  loading: authStatus.isLoading,
+                  text: 'Create',
                 ),
-                child: authStatus.isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Sign Up'),
               );
             },
           ),
@@ -194,25 +152,20 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           (errorMessage != null
               ? const SizedBox(height: 20)
               : const SizedBox.shrink()),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.shop),
-            onPressed: () {
-              // Handle Google Sign-In
-            },
-            label: const Text('Sign In with Google'),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              minimumSize: const Size(140, 40),
-            ),
-          ),
           TextButton(
             onPressed: () {
               context.go('/login');
             },
-            child: Text(
-              "Already have an account? Login.",
-              style: TextStyle(color: Colors.lightBlue[100]),
+            child: const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Already have an account? ",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  TextSpan(text: 'Login.'),
+                ],
+              ),
             ),
           ),
         ],
