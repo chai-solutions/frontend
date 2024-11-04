@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const Color primary = Color(0xFF148FC5);
 const Color secondary = Color(0xABABABAB);
@@ -15,7 +16,7 @@ class GlobalThemeData {
   static ThemeData defaultTheme = themeData(darkColorScheme);
 
   static ThemeData themeData(ColorScheme colorScheme) {
-    return ThemeData(
+    final baseTheme = ThemeData(
       appBarTheme: const AppBarTheme(
         foregroundColor: lightText,
         backgroundColor: secondaryBackground,
@@ -29,6 +30,22 @@ class GlobalThemeData {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: secondaryBackground,
         selectedItemColor: primary,
+      ),
+    );
+
+    final defaultTextTheme = baseTheme.textTheme;
+
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.ibmPlexSansTextTheme(defaultTextTheme).copyWith(
+        headlineLarge:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineLarge),
+        headlineMedium:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineMedium),
+        headlineSmall:
+            GoogleFonts.cairo(textStyle: defaultTextTheme.headlineSmall),
+        titleLarge: GoogleFonts.cairo(textStyle: defaultTextTheme.titleLarge),
+        titleMedium: GoogleFonts.cairo(textStyle: defaultTextTheme.titleMedium),
+        titleSmall: GoogleFonts.cairo(textStyle: defaultTextTheme.titleSmall),
       ),
     );
   }
