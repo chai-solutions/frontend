@@ -27,7 +27,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   talker_flutter: ^4.4.1
   talker_riverpod_logger: ^4.4.1
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^9.2.2
   toastification: ^2.3.0
   intl: ^0.19.0
 
