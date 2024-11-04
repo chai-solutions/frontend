@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-const Color primary = Color(0xFFF37125);
-const Color secondary = Color(0xFFFED766);
+const Color primary = Color(0xFF148FC5);
+const Color secondary = Color(0xABABABAB);
 const Color tertiary = Color(0xFFC1839F);
-const Color error = Color(0xFF8C001A);
+const Color error = Color(0xFFAB0807);
 
-const Color lightText = Color(0xFFE6E6EA);
+const Color lightText = Color(0xFFFFFFFF);
 const Color darkText = Color(0xFF3A405A);
 
-const Color background = Color(0xFF121212);
-const Color secondaryBackground = Color(0xFF343434);
+const Color background = Color(0xFF242424);
+const Color secondaryBackground = Color(0xFF424242);
 
 class GlobalThemeData {
   static ThemeData defaultTheme = themeData(darkColorScheme);
