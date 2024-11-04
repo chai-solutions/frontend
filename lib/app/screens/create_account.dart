@@ -1,3 +1,4 @@
+import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/text_field.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
@@ -132,18 +133,15 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             builder: (context, ref, child) {
               final authStatus = ref.watch(authControllerProvider);
 
-              return ElevatedButton(
-                onPressed: () => _submit(context, ref),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size(double.infinity, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              return SizedBox(
+                width: double.infinity,
+                child: GSButton(
+                  buttonType: GSButtonType.primary,
+                  onPressed: () => _submit(context, ref),
+                  changeDisableColor: !authStatus.isLoading,
+                  loading: authStatus.isLoading,
+                  text: 'Create',
                 ),
-                child: authStatus.isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Sign Up'),
               );
             },
           ),
@@ -158,9 +156,16 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             onPressed: () {
               context.go('/login');
             },
-            child: Text(
-              "Already have an account? Login.",
-              style: TextStyle(color: Colors.lightBlue[100]),
+            child: const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Already have an account? ",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  TextSpan(text: 'Login.'),
+                ],
+              ),
             ),
           ),
         ],

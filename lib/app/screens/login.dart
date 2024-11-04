@@ -1,3 +1,4 @@
+import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/text_field.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
@@ -52,12 +53,15 @@ class LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  AutovalidateMode _validationMode = AutovalidateMode.disabled;
+
   String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
+      autovalidateMode: _validationMode,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -103,7 +107,6 @@ class LoginFormState extends State<LoginForm> {
               },
               child: const Text(
                 'Forgot password?',
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -112,18 +115,15 @@ class LoginFormState extends State<LoginForm> {
             builder: (context, ref, child) {
               final authStatus = ref.watch(authControllerProvider);
 
-              return ElevatedButton(
-                onPressed: () => _submit(context, ref),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: const Size(double.infinity, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              return SizedBox(
+                width: double.infinity,
+                child: GSButton(
+                  buttonType: GSButtonType.primary,
+                  onPressed: () => _submit(context, ref),
+                  changeDisableColor: !authStatus.isLoading,
+                  loading: authStatus.isLoading,
+                  text: 'Login',
                 ),
-                child: authStatus.isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Log In'),
               );
             },
           ),
@@ -138,9 +138,16 @@ class LoginFormState extends State<LoginForm> {
             onPressed: () {
               context.go('/create-account');
             },
-            child: Text(
-              "Don't have an account? Create one.",
-              style: TextStyle(color: Colors.lightBlue[100]),
+            child: const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Don't have an account? ",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  TextSpan(text: 'Create one.'),
+                ],
+              ),
             ),
           ),
         ],
@@ -182,6 +189,10 @@ class LoginFormState extends State<LoginForm> {
           this.errorMessage = errorMessage;
         });
       }
+    } else {
+      setState(() {
+        _validationMode = AutovalidateMode.always;
+      });
     }
   }
 }

@@ -6,8 +6,8 @@ const Color secondary = Color(0xABABABAB);
 const Color tertiary = Color(0xFFC1839F);
 const Color error = Color(0xFFAB0807);
 
-const Color lightText = Color(0xFFFFFFFF);
-const Color darkText = Color(0xFF3A405A);
+const Color primaryText = Color(0xFFFFFFFF);
+const Color secondaryText = Color(0xFF148FC5);
 
 const Color background = Color(0xFF242424);
 const Color secondaryBackground = Color(0xFF424242);
@@ -18,7 +18,7 @@ class GlobalThemeData {
   static ThemeData themeData(ColorScheme colorScheme) {
     final baseTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        foregroundColor: lightText,
+        foregroundColor: primaryText,
         backgroundColor: secondaryBackground,
         scrolledUnderElevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -57,10 +57,10 @@ class GlobalThemeData {
     surfaceBright: secondaryBackground,
     tertiary: tertiary,
     error: error,
-    onError: lightText,
-    onPrimary: lightText,
-    onSecondary: darkText,
-    onSurface: lightText,
+    onError: primaryText,
+    onPrimary: primaryText,
+    onSecondary: secondaryText,
+    onSurface: primaryText,
     brightness: Brightness.dark,
   );
 }
