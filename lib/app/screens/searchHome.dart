@@ -90,24 +90,6 @@ class SearchHomeScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Padding(padding: const EdgeInsets.all(0.0)),
-                    SizedBox(
-                      width: 300,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          if (context.mounted) {
-                            context.go('/home');
-                          }
-                        },
-                        icon: const Icon(Icons.search),
-                        label: const Text('Search For Flight'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.white, // Set the background color to white
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               )),

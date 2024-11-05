@@ -146,15 +146,26 @@ class FlightPlanList extends ConsumerWidget {
           ),
         ),
         //button will bring user to screen where user can search for flights
-        GSButton(
-          onPressed: () async {
-            final authController = ref.read(authControllerProvider.notifier);
-            if (context.mounted) {
-              context.go('/searchHome');
-            }
-          },
-          text: 'Search Flight',
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              final authController = ref.read(authControllerProvider.notifier);
+              if (context.mounted) {
+                context.go('/searchHome');
+              }
+            },
+            icon: const Icon(Icons.search),
+            label: const Text(
+                style: TextStyle(fontWeight: FontWeight.bold), 'Search Flight'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 19, 143, 194),
+              iconColor: Colors.white,
+              foregroundColor: Colors.white,
+            ),
+          ),
         ),
+
         // Row of buttons at the bottom
         Padding(
           padding: const EdgeInsets.all(16.0),

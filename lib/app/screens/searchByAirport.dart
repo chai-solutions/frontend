@@ -74,7 +74,7 @@ class SearchByAirport extends ConsumerWidget {
                             context.go('/home');
                           }
                         },
-                        icon: const Icon(Icons.arrow_back),
+                        icon: const Icon(Icons.search),
                         label: const Text('Search For Flight'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
