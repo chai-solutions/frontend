@@ -1,4 +1,5 @@
 import 'package:chai/app/widgets/buttons.dart';
+import 'package:chai/app/widgets/main_page_scaffold.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
@@ -15,95 +16,12 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
+    final fullName = user.whenOrNull(data: (u) => u.name);
+    final name = fullName?.split(' ').elementAt(0);
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background2.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: constraints.maxHeight * 0.2,
-                    child: Stack(
-                      children: [
-                        // Title message in the center
-                        Positioned(
-                          left: 16.0,
-                          bottom: 16.0,
-                          // child:
-                          child: user.maybeWhen(
-                            data: (u) {
-                              return Text(
-                                'Welcome, ${u.name}!',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              );
-                            },
-                            orElse: () => const SizedBox.shrink(),
-                          ),
-                        ),
-                        // Notifications icon and circular image at the top right
-                        Positioned(
-                          right: 16.0,
-                          top: 16.0,
-                          child: Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.notifications,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {},
-                              ),
-                              const SizedBox(width: 8.0),
-                              CircleAvatar(
-                                backgroundColor:
-                                    user.hasValue ? null : Colors.grey,
-                                backgroundImage: user.maybeWhen(
-                                  data: (u) {
-                                    final component =
-                                        Uri.encodeComponent(u.name);
-                                    return NetworkImage(
-                                        "https://ui-avatars.com/api/?name=$component");
-                                  },
-                                  orElse: () => null,
-                                ),
-                                radius: 20.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: constraints.maxHeight * 0.8,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                    ),
-                    child: const FlightPlanList(),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
+    return MainPageScaffold(
+      title: name != null ? 'Welcome, $name!' : null,
+      child: const FlightPlanList(),
     );
   }
 }
@@ -123,7 +41,6 @@ class FlightPlanList extends ConsumerWidget {
           child: Text(
             'My Trips',
             style: TextStyle(
-              color: Colors.black,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,
             ),
@@ -183,10 +100,7 @@ class FlightPlanList extends ConsumerWidget {
     if (plans.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text(
-            'No flight plans have been made.',
-            style: TextStyle(color: Colors.black),
-          ),
+          child: Text('No flight plans have been made.'),
         ),
       );
     }
