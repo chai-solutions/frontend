@@ -2,4 +2,4 @@ git_url("https://github.com/chai-solutions/app-certs")
 storage_mode("git")
 type("appstore")
 
-app_identifier(["org.chai-solutions.chai"])
+app_identifier(["org.chai-solutions.chai", "org.chai-solutions.chai.OneSignalNotificationServiceExtension"])
