@@ -5,6 +5,7 @@ import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/repository/flight_plan.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:chai/providers/http_client.dart';
 import 'package:chai/utils/env.dart';
@@ -21,6 +22,7 @@ String outputDepAP = 'NA';
 String outputArrAP = 'NA';
 
 final myController = TextEditingController();
+final planNumController = TextEditingController();
 
 class SearchByFlightNum extends ConsumerStatefulWidget {
   const SearchByFlightNum({super.key});
@@ -74,6 +76,49 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
       }
     }
 
+    Future<Map<String, dynamic>?> addToFlightPlan(
+        String flightNum, int planNum) async {
+      final baseURL = Env().baseURL;
+      try {
+        print('searchFlightNum: $flightNum');
+        //authorize query
+        final client = ref.read(httpClientProvider);
+        //submit query
+        final response = await client
+            .post('/flight_plans/$planNum', body: {"flightNumber": flightNum});
+        final statusCode = response.statusCode;
+        //flight found
+        if (statusCode == 200) {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          setState(() {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Success!'),
+                content: Text('Flight added to plan.'),
+              ),
+            );
+          });
+          return data;
+        } else {
+          //flight not found
+          print('Failed to add flight. Status code: $statusCode');
+          setState(() {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Error'),
+                content: Text(
+                    'Could not add flight to flight plan. \nInvalid flight code.'),
+              ),
+            );
+          });
+        }
+      } catch (error) {
+        print("Invalid Flight Code");
+      }
+    }
+
     final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
@@ -103,7 +148,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 300.0),
+                padding: EdgeInsets.only(bottom: 100.0),
                 child: Column(
                   children: [
                     //USER INPUT FIELD HERE
@@ -171,6 +216,44 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                       child: Text(
                         'Destination: $outputArrAP',
                         style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    //number of flight plan that flight will be added to
+                    Padding(padding: EdgeInsets.only(bottom: 20.0)),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        //allows for the transfer of info from text field to other places
+                        controller: planNumController,
+                        //only numbers allowed in text field
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                          labelText: 'Add Flight To This Plan',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final authController =
+                              ref.read(authControllerProvider.notifier);
+                          //context.go('/home');
+                          String userInput = myController.text;
+                          //convert flight plan number input into int
+                          int userPlanNum = int.parse(planNumController.text);
+                          print('Adding Flight: $userInput');
+                          final flightData =
+                              await addToFlightPlan(userInput, userPlanNum);
+                        },
+                        label: const Text('Flight Plan Number'),
+                        icon: const Icon(Icons.arrow_forward),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
                       ),
                     ),
                   ],
