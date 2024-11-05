@@ -1,6 +1,8 @@
+import 'package:chai/app/screens/about.dart';
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
 import 'package:chai/app/screens/login.dart';
+import 'package:chai/app/screens/settings.dart';
 import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,6 +35,18 @@ GoRouter router(RouterRef ref) {
         path: '/home',
         builder: (context, state) {
           return const HomePage();
+        },
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) {
+          return const Settings();
+        },
+      ),
+      GoRoute(
+        path: '/about',
+        builder: (context, state) {
+          return const AboutPage();
         },
       )
     ],

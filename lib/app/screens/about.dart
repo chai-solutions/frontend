@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:go_router/go_router.dart';
 
 class PersonRecord {
   final String name;
@@ -330,7 +331,7 @@ final List<PersonRecord> teamMembers = [
 ];
 
 const groupDescription =
-    "We are Chai Solutions, a group that came into existence"
+    "We are Chai Solutions, a group that came into existence "
     "for a software engineering class at our university: "
     "specifically, CSC-648 at San Francisco State University. "
     "Our group came together during the Fall 2024 semester, in "
@@ -348,7 +349,15 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('About')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title: const Text('About'),
+      ),
       body: Center(
         child: ListView(
           padding: const EdgeInsets.all(16.0),

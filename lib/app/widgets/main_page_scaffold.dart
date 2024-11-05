@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MainPageScaffold extends StatelessWidget {
   final String? title;
@@ -65,7 +66,9 @@ class MainPageScaffold extends StatelessWidget {
                                   Icons.settings,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.push('/settings');
+                                },
                               ),
                             ],
                           ),
