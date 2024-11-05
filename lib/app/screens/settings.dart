@@ -1,3 +1,5 @@
+import 'package:chai/repository/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -48,10 +50,24 @@ class _SettingsState extends State<Settings> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 24),
-
-              // Notification and About Section
+              Consumer(
+                builder: (context, ref, child) {
+                  final user = ref.watch(currentUserProvider);
+                  return user.maybeWhen(
+                    data: (u) => Column(
+                      children: [
+                        _UserProfile(
+                          email: u.email,
+                          fullName: u.name,
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
+                    orElse: () => const SizedBox.shrink(),
+                  );
+                },
+              ),
               Material(
                 child: Ink(
                   decoration: BoxDecoration(
@@ -90,9 +106,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
-
               Material(
                 child: Ink(
                   decoration: BoxDecoration(
@@ -147,6 +161,70 @@ class _SettingsState extends State<Settings> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Divider(height: 1, color: color),
+    );
+  }
+}
+
+class _UserProfile extends StatelessWidget {
+  final String fullName;
+  final String email;
+
+  const _UserProfile({
+    super.key,
+    required this.fullName,
+    required this.email,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final component = Uri.encodeComponent(fullName);
+    final imageUrl = "https://ui-avatars.com/api/?name=$component";
+
+    final theme = Theme.of(context);
+    final sectionBackgroundColor =
+        Color.lerp(theme.colorScheme.surface, Colors.white, 0.1)!;
+    final emailColor =
+        Color.lerp(theme.colorScheme.onSurface, Colors.black, 0.4)!;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: sectionBackgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(imageUrl),
+            ),
+            const SizedBox(width: 16),
+
+            // Name and Email
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  fullName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  email,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: emailColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
