@@ -1,9 +1,11 @@
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
+import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Settings extends ConsumerStatefulWidget {
@@ -20,8 +22,6 @@ class _SettingsState extends ConsumerState<Settings> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sectionBackgroundColor =
-        Color.lerp(theme.colorScheme.surface, Colors.white, 0.1)!;
     final dividerColor =
         Color.lerp(theme.colorScheme.surface, Colors.white, 0.3)!;
     final dangerousColor =
@@ -72,132 +72,101 @@ class _SettingsState extends ConsumerState<Settings> {
                   );
                 },
               ),
-              Material(
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: sectionBackgroundColor,
-                    borderRadius: BorderRadius.circular(8),
+              _SettingsRowsSection(
+                children: [
+                  const NotificationSettingsRow(),
+                  _divider(dividerColor),
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    leading: const Icon(Icons.music_note),
+                    title: const Text("Sound"),
+                    trailing: Switch(
+                      value: soundChecked,
+                      onChanged: (bool value) {
+                        setState(() {
+                          soundChecked = value;
+                        });
+                      },
+                    ),
+                    onTap: null,
                   ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: const Icon(Icons.notifications),
-                        title: const Text("Notifications"),
-                        trailing: Switch(
-                          value: notificationChecked,
-                          onChanged: (bool value) {
-                            setState(() {
-                              notificationChecked = value;
-                            });
-                          },
-                        ),
-                        onTap: null,
-                      ),
-                      _divider(dividerColor),
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: const Icon(Icons.music_note),
-                        title: const Text("Sound"),
-                        trailing: Switch(
-                          value: soundChecked,
-                          onChanged: (bool value) {
-                            setState(() {
-                              soundChecked = value;
-                            });
-                          },
-                        ),
-                        onTap: null,
-                      ),
-                    ],
-                  ),
-                ),
+                ],
               ),
               const SizedBox(height: 24),
-              Material(
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: sectionBackgroundColor,
-                    borderRadius: BorderRadius.circular(8),
+              _SettingsRowsSection(
+                children: [
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    leading: const Icon(Icons.privacy_tip),
+                    title: const Text("Privacy"),
+                    trailing: const Icon(Icons.arrow_forward),
+                    onTap: () {
+                      launchUrlString('https://chai-solutions.org/privacy');
+                    },
                   ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: const Icon(Icons.privacy_tip),
-                        title: const Text("Privacy"),
-                        trailing: const Icon(Icons.arrow_forward),
-                        onTap: () {
-                          launchUrlString('https://chai-solutions.org/privacy');
-                        },
-                      ),
-                      _divider(dividerColor),
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: const Icon(Icons.info),
-                        title: const Text("About"),
-                        trailing: const Icon(Icons.arrow_forward),
-                        onTap: () {
-                          context.push('/about');
-                        },
-                      ),
-                      _divider(dividerColor),
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: Icon(
-                          Icons.logout,
-                          color: dangerousColor,
-                        ),
-                        title: Text(
-                          "Log Out",
-                          style: TextStyle(color: dangerousColor),
-                        ),
-                        onTap: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          await authController.logout();
+                  _divider(dividerColor),
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    leading: const Icon(Icons.info),
+                    title: const Text("About"),
+                    trailing: const Icon(Icons.arrow_forward),
+                    onTap: () {
+                      context.push('/about');
+                    },
+                  ),
+                  _divider(dividerColor),
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    leading: Icon(
+                      Icons.logout,
+                      color: dangerousColor,
+                    ),
+                    title: Text(
+                      "Log Out",
+                      style: TextStyle(color: dangerousColor),
+                    ),
+                    onTap: () async {
+                      final authController =
+                          ref.read(authControllerProvider.notifier);
+                      await authController.logout();
 
-                          if (context.mounted) {
-                            infoToast(
-                              context: context,
-                              title: 'Logged Out',
-                              message: 'Come back soon!',
-                              icon: const Icon(Icons.logout),
-                            );
-                            context.replace('/login');
-                          }
-                        },
-                      ),
-                      _divider(dividerColor),
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        leading: Icon(
-                          Icons.delete,
-                          color: dangerousColor,
-                        ),
-                        title: Text(
-                          "Delete Account",
-                          style: TextStyle(color: dangerousColor),
-                        ),
-                        onTap: () {
-                          // Handle account deletion action
-                        },
-                      ),
-                    ],
+                      if (context.mounted) {
+                        infoToast(
+                          context: context,
+                          title: 'Logged Out',
+                          message: 'Come back soon!',
+                          icon: const Icon(Icons.logout),
+                        );
+                        context.replace('/login');
+                      }
+                    },
                   ),
-                ),
+                  _divider(dividerColor),
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    leading: Icon(
+                      Icons.delete,
+                      color: dangerousColor,
+                    ),
+                    title: Text(
+                      "Delete Account",
+                      style: TextStyle(color: dangerousColor),
+                    ),
+                    onTap: () {
+                      // Handle account deletion action
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -248,8 +217,6 @@ class _UserProfile extends StatelessWidget {
               backgroundImage: NetworkImage(imageUrl),
             ),
             const SizedBox(width: 16),
-
-            // Name and Email
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -272,6 +239,79 @@ class _UserProfile extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SettingsRowsSection extends StatelessWidget {
+  final List<Widget> children;
+
+  const _SettingsRowsSection({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final sectionBackgroundColor =
+        Color.lerp(theme.colorScheme.surface, Colors.white, 0.1)!;
+
+    return Material(
+      child: Ink(
+        decoration: BoxDecoration(
+          color: sectionBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: children,
+        ),
+      ),
+    );
+  }
+}
+
+class NotificationSettingsRow extends ConsumerStatefulWidget {
+  const NotificationSettingsRow({super.key});
+
+  @override
+  ConsumerState<NotificationSettingsRow> createState() =>
+      _NotificationSettingsRowState();
+}
+
+class _NotificationSettingsRowState
+    extends ConsumerState<NotificationSettingsRow> {
+  bool notificationChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    notificationChecked = OneSignal.User.pushSubscription.optedIn ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      leading: const Icon(Icons.notifications),
+      title: const Text("Notifications"),
+      trailing: Switch(
+        value: notificationChecked,
+        onChanged: (bool value) async {
+          if (value) {
+            await OneSignal.User.pushSubscription.optIn();
+            if (OneSignal.User.pushSubscription.optedIn ?? false) {
+              setState(() {
+                notificationChecked = true;
+              });
+            }
+          } else {
+            await OneSignal.User.pushSubscription.optOut();
+            setState(() {
+              notificationChecked = false;
+            });
+          }
+        },
       ),
     );
   }
