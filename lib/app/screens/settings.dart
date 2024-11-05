@@ -25,7 +25,7 @@ class _SettingsState extends ConsumerState<Settings> {
     final dividerColor =
         Color.lerp(theme.colorScheme.surface, Colors.white, 0.3)!;
     final dangerousColor =
-        Color.lerp(theme.colorScheme.error, Colors.white, 0.2)!;
+        Color.lerp(theme.colorScheme.error, Colors.white, 0.4)!;
 
     return Scaffold(
       body: SafeArea(
