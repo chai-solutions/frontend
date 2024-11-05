@@ -148,7 +148,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 100.0),
+                padding: EdgeInsets.only(top: 5.0),
                 child: Column(
                   children: [
                     //USER INPUT FIELD HERE
@@ -235,6 +235,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                         ),
                       ),
                     ),
+                    Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
