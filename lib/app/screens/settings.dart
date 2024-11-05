@@ -4,6 +4,7 @@ import 'package:chai/repository/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
@@ -13,7 +14,8 @@ class Settings extends ConsumerStatefulWidget {
 }
 
 class _SettingsState extends ConsumerState<Settings> {
-  bool checked = false;
+  bool notificationChecked = false;
+  bool soundChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +87,10 @@ class _SettingsState extends ConsumerState<Settings> {
                         leading: const Icon(Icons.notifications),
                         title: const Text("Notifications"),
                         trailing: Switch(
-                          value: checked,
+                          value: notificationChecked,
                           onChanged: (bool value) {
                             setState(() {
-                              checked = value;
+                              notificationChecked = value;
                             });
                           },
                         ),
@@ -99,10 +101,17 @@ class _SettingsState extends ConsumerState<Settings> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        leading: const Icon(Icons.info),
-                        title: const Text("About"),
-                        trailing: const Icon(Icons.arrow_forward),
-                        onTap: () {},
+                        leading: const Icon(Icons.music_note),
+                        title: const Text("Sound"),
+                        trailing: Switch(
+                          value: soundChecked,
+                          onChanged: (bool value) {
+                            setState(() {
+                              soundChecked = value;
+                            });
+                          },
+                        ),
+                        onTap: null,
                       ),
                     ],
                   ),
@@ -117,6 +126,30 @@ class _SettingsState extends ConsumerState<Settings> {
                   ),
                   child: Column(
                     children: [
+                      ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        leading: const Icon(Icons.privacy_tip),
+                        title: const Text("Privacy"),
+                        trailing: const Icon(Icons.arrow_forward),
+                        onTap: () {
+                          launchUrlString('https://chai-solutions.org/privacy');
+                        },
+                      ),
+                      _divider(dividerColor),
+                      ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        leading: const Icon(Icons.info),
+                        title: const Text("About"),
+                        trailing: const Icon(Icons.arrow_forward),
+                        onTap: () {
+                          context.push('/about');
+                        },
+                      ),
+                      _divider(dividerColor),
                       ListTile(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),

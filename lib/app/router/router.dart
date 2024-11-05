@@ -1,3 +1,4 @@
+import 'package:chai/app/screens/about.dart';
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
 import 'package:chai/app/screens/login.dart';
@@ -40,6 +41,12 @@ GoRouter router(RouterRef ref) {
         path: '/settings',
         builder: (context, state) {
           return const Settings();
+        },
+      ),
+      GoRoute(
+        path: '/about',
+        builder: (context, state) {
+          return const AboutPage();
         },
       )
     ],
