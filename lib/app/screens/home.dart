@@ -41,7 +41,6 @@ class FlightPlanList extends ConsumerWidget {
           child: Text(
             'My Trips',
             style: TextStyle(
-              color: Colors.black,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,
             ),
@@ -101,10 +100,7 @@ class FlightPlanList extends ConsumerWidget {
     if (plans.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text(
-            'No flight plans have been made.',
-            style: TextStyle(color: Colors.black),
-          ),
+          child: Text('No flight plans have been made.'),
         ),
       );
     }

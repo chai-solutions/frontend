@@ -40,7 +40,7 @@ class MainPageScaffold extends StatelessWidget {
                                     title!,
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 24.0,
+                                      fontSize: 30.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )
@@ -75,9 +75,9 @@ class MainPageScaffold extends StatelessWidget {
                   ),
                   Container(
                     height: constraints.maxHeight * 0.8,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0),
                       ),
