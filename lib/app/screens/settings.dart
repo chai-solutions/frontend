@@ -1,16 +1,18 @@
+import 'package:chai/app/widgets/toasts.dart';
+import 'package:chai/controllers/auth.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-class Settings extends StatefulWidget {
+class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  ConsumerState<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends ConsumerState<Settings> {
   bool checked = false;
 
   @override
@@ -127,7 +129,21 @@ class _SettingsState extends State<Settings> {
                           "Log Out",
                           style: TextStyle(color: dangerousColor),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          final authController =
+                              ref.read(authControllerProvider.notifier);
+                          await authController.logout();
+
+                          if (context.mounted) {
+                            infoToast(
+                              context: context,
+                              title: 'Logged Out',
+                              message: 'Come back soon!',
+                              icon: const Icon(Icons.logout),
+                            );
+                            context.replace('/login');
+                          }
+                        },
                       ),
                       _divider(dividerColor),
                       ListTile(
@@ -170,7 +186,6 @@ class _UserProfile extends StatelessWidget {
   final String email;
 
   const _UserProfile({
-    super.key,
     required this.fullName,
     required this.email,
   });
