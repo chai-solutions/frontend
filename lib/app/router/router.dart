@@ -1,7 +1,12 @@
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
 import 'package:chai/app/screens/login.dart';
+import 'package:chai/app/screens/searchByAirport.dart';
+import 'package:chai/app/screens/searchByFlightNum.dart';
 import 'package:chai/app/screens/splash.dart';
+import 'package:chai/app/screens/searchHome.dart';
+import 'package:chai/app/screens/searchByFlightNum.dart';
+import 'package:chai/app/screens/searchByAirport.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,11 +35,29 @@ GoRouter router(RouterRef ref) {
         },
       ),
       GoRoute(
+        path: '/searchHome',
+        builder: (context, state) {
+          return const SearchHomeScreen();
+        },
+      ),
+      GoRoute(
         path: '/home',
         builder: (context, state) {
           return const HomePage();
         },
-      )
+      ),
+      GoRoute(
+        path: '/searchByFlightNum',
+        builder: (context, state) {
+          return const SearchByFlightNum();
+        },
+      ),
+      GoRoute(
+        path: '/searchByAirport',
+        builder: (context, state) {
+          return const SearchByAirport();
+        },
+      ),
     ],
   );
 }

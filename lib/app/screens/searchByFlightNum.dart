@@ -1,0 +1,92 @@
+import 'package:chai/app/widgets/buttons.dart';
+import 'package:chai/app/widgets/toasts.dart';
+import 'package:chai/controllers/auth.dart';
+import 'package:chai/models/flight_plan/flight_plan.dart';
+import 'package:chai/repository/flight_plan.dart';
+import 'package:chai/repository/user.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+final myController = TextEditingController();
+
+class SearchByFlightNum extends ConsumerWidget {
+  const SearchByFlightNum({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 100.0,
+            ),
+            //button to go back home
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                final authController =
+                    ref.read(authControllerProvider.notifier);
+                if (context.mounted) {
+                  context.go('/searchHome');
+                }
+              },
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Back'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Colors.white, // Set the background color to white
+              ),
+            ),
+          ),
+          Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 400.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Starting Airport',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Destination Airport',
+                        ),
+                      ),
+                    ),
+                    Padding(padding: const EdgeInsets.all(16.0)),
+                    SizedBox(
+                      width: 300,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final authController =
+                              ref.read(authControllerProvider.notifier);
+                          if (context.mounted) {
+                            context.go('/home');
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text('Search For Flight'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.white, // Set the background color to white
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+}
