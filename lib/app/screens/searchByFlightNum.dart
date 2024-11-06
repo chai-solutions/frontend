@@ -187,35 +187,35 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                       width: 300,
                       child: Text(
                         'Flight Code: $outputFlightNum',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      child: Text(
-                        'Arrival Time: $outputArrTime',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Departure Time: $outputDepTime',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: Text(
+                        'Arrival Time: $outputArrTime',
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Startpoint: $outputDepAP',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Destination: $outputArrAP',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     //number of flight plan that flight will be added to

@@ -23,6 +23,7 @@ String outputArrAP = 'NA';
 
 final depController = TextEditingController();
 final arrController = TextEditingController();
+final dateController = TextEditingController();
 final planNumController = TextEditingController();
 
 class SearchByAirport extends ConsumerStatefulWidget {
@@ -35,20 +36,20 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
   @override
   Widget build(BuildContext context) {
     Future<Map<String, dynamic>?> searchFlightAirport(
-        String depAir, String arrAir) async {
+        String depAir, String arrAir, String inputDate) async {
       final baseURL = Env().baseURL;
       try {
         print('search depature aiport: $depAir');
         print('search arrival aiport: $arrAir');
+        print('search flight date: $inputDate');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
-        final response = await client
-            .get('/flights?departure_airport=SFO&arrival_airport=MIA');
+        final response = await client.get(
+            '/flights?departure_airport=$depAir&arrival_airport=$arrAir&sched_dep_time=$inputDate');
         final statusCode = response.statusCode;
         //flight found
         if (statusCode == 200) {
-          print('flight found');
           final listData = jsonDecode(response.body) as List<dynamic>;
 
           //REPLACE LATER!!! just gets information on first flight meeting parameters, must display flights as a list when we get more
@@ -67,7 +68,7 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
           return data;
         } else {
           //flight not found
-          print('Failed to fetch pokemon data. Status code: $statusCode');
+          print('Failed to fetch flight data. Status code: $statusCode');
           setState(() {
             outputFlightNum = 'NA';
             outputArrTime = 'NA';
@@ -85,6 +86,36 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
         }
       } catch (error) {
         print("Invalid Flight. Error: $error");
+        print('Failed to fetch flight data. Status code: $error');
+        setState(() {
+          outputFlightNum = 'NA';
+          outputArrTime = 'NA';
+          outputDepTime = 'NA';
+          outputDepAP = 'NA';
+          outputArrAP = 'NA';
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Error'),
+              content: Text('Invalid flight info.'),
+            ),
+          );
+        });
+      }
+    }
+
+    //date picker
+    Future<void> _selectDate() async {
+      DateTime? _userInputDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2150),
+      );
+      if (_userInputDate != null) {
+        setState(() {
+          dateController.text = _userInputDate.toString().split(" ")[0];
+        });
       }
     }
 
@@ -188,6 +219,35 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                     Padding(padding: const EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
+                      child: TextField(
+                        //allows for the transfer of info from text field to other places
+                        //controller: arrController,
+                        decoration: InputDecoration(
+                          labelText: 'Airline',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                          //allows for the transfer of info from text field to other places
+                          controller: dateController,
+                          decoration: InputDecoration(
+                            labelText: 'Departure Date',
+                            filled: true,
+                            prefixIcon: Icon(Icons.calendar_today),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            _selectDate();
+                          }),
+                    ),
+                    //Search Submit button
+                    Padding(padding: const EdgeInsets.all(5.0)),
+                    //Search Submit button
+                    Padding(padding: const EdgeInsets.all(5.0)),
+                    SizedBox(
+                      width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           final authController =
@@ -195,10 +255,14 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                           //context.go('/home');
                           String userInputDep = depController.text;
                           String userInputArr = arrController.text;
+                          String userInputDate = dateController.text;
                           print(
                               'USER INPUT:\nDepature Airport: $userInputDep\nArrival Airport: $userInputArr');
                           final flightData = await searchFlightAirport(
-                              userInputDep, userInputArr);
+                            userInputDep,
+                            userInputArr,
+                            userInputDate,
+                          );
                         },
                         icon: const Icon(Icons.search),
                         label: const Text('Search For Flight'),
@@ -213,35 +277,35 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                       width: 300,
                       child: Text(
                         'Flight Code: $outputFlightNum',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      child: Text(
-                        'Arrival Time: $outputArrTime',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Departure Time: $outputDepTime',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: Text(
+                        'Arrival Time: $outputArrTime',
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Startpoint: $outputDepAP',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     SizedBox(
                       width: 300,
                       child: Text(
                         'Destination: $outputArrAP',
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     //number of flight plan that flight will be added to
@@ -257,7 +321,7 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Add Flight To This Plan',
+                          labelText: 'Flight Plan Name',
                         ),
                       ),
                     ),
