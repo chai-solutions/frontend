@@ -52,12 +52,13 @@ class RealSplashScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/background2.png"),
-            //fit: BoxFit.cover,
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset("assets/background2.png"),
             const Text('GateSoup'),
             ElevatedButton(
               onPressed: () {
