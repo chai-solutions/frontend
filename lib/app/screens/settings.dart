@@ -1,6 +1,5 @@
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/controllers/auth.dart';
-import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

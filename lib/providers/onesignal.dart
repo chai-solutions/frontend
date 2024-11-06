@@ -9,8 +9,7 @@ OneSignalService oneSignalService(OneSignalServiceRef ref) {
   final user = ref.watch(currentUserProvider);
 
   final userID = user.maybeWhen(
-    // TODO: this must be changed to the UUID once it is present
-    data: (u) => u.id.toString(),
+    data: (u) => u.id,
     orElse: () => null,
   );
 

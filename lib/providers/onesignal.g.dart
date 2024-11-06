@@ -6,7 +6,7 @@ part of 'onesignal.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$oneSignalServiceHash() => r'6b8e54dd3d9309147874496eaf35fa7658ef5db2';
+String _$oneSignalServiceHash() => r'dcac2033a516465f6cf99125360b4c9d1efc0b9d';
 
 /// See also [oneSignalService].
 @ProviderFor(oneSignalService)
@@ -21,7 +21,7 @@ final oneSignalServiceProvider = AutoDisposeProvider<OneSignalService>.internal(
 );
 
 typedef OneSignalServiceRef = AutoDisposeProviderRef<OneSignalService>;
-String _$oneSignalListenerHash() => r'658d780c5aa44dbde91aaa9c3192abea00850131';
+String _$oneSignalListenerHash() => r'4edfd061ccaeb5489558b72db3e322cd4a433eb5';
 
 /// See also [oneSignalListener].
 @ProviderFor(oneSignalListener)
