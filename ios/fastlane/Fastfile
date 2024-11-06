@@ -37,25 +37,25 @@ platform :ios do
       setup_ci
     end
 
-    produce(
-      app_identifier: "org.chai-solutions.chai",
-      app_name: "GateSoup",
+    # produce(
+    #   app_identifier: "org.chai-solutions.chai",
+    #   app_name: "GateSoup",
 
-      enable_services: {
-        push_notification: "on",
-        app_group: "on",
-      }
-    )
+    #   enable_services: {
+    #     push_notification: "on",
+    #     app_group: "on",
+    #   }
+    # )
 
-    produce(
-      app_identifier: "org.chai-solutions.chai.OneSignalNotificationServiceExtension",
-      app_name: "GateSoup OneSignal",
-      skip_itc: true,
+    # produce(
+    #   app_identifier: "org.chai-solutions.chai.OneSignalNotificationServiceExtension",
+    #   app_name: "GateSoup OneSignal",
+    #   skip_itc: true,
 
-      enable_services: {
-        app_group: "on",
-      }
-    )
+    #   enable_services: {
+    #     app_group: "on",
+    #   }
+    # )
 
     match(
       app_identifier: ["org.chai-solutions.chai","org.chai-solutions.chai.OneSignalNotificationServiceExtension"],
@@ -71,8 +71,8 @@ platform :ios do
       archive_path: "../build/ios/archive/Runner.xcarchive",
     )
 
-    # upload_to_testflight(
-    #   skip_waiting_for_build_processing: true
-    # )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
   end
 end
