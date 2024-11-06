@@ -1,6 +1,6 @@
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
-import 'package:chai/app/widgets/toasts.dart';
+import 'package:chai/pages/add_trip.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/repository/flight_plan.dart';
@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
+import 'add_trip.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -70,10 +72,10 @@ class FlightPlanList extends ConsumerWidget {
             children: [
               GSButton(
                 onPressed: () {
-                  warningToast(
-                    context: context,
-                    title: 'Unimplemented',
-                    message: "We'll get around to this soon!",
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddTripPage()),
                   );
                 },
                 text: 'Add Plan',
