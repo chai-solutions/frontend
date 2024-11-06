@@ -24,7 +24,23 @@ String outputArrAP = 'NA';
 final depController = TextEditingController();
 final arrController = TextEditingController();
 final dateController = TextEditingController();
+final airlineController = TextEditingController();
 final planNumController = TextEditingController();
+
+airlineSwitcher? selectedAirline;
+
+//stuff for airline dropdown menu
+enum airlineSwitcher {
+  Southwest('Southwest Airlines', Colors.blue),
+  Alaska('Alaska Airlines', Colors.blue),
+  American('American Airlines', Colors.red),
+  Spirit('Spirit Airlines', Colors.orange),
+  United('Untied Airlines', Color.fromARGB(255, 18, 55, 85));
+
+  const airlineSwitcher(this.label, this.color);
+  final String label;
+  final Color color;
+}
 
 class SearchByAirport extends ConsumerStatefulWidget {
   const SearchByAirport({super.key});
@@ -219,12 +235,37 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                     Padding(padding: const EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
-                      child: TextField(
-                        //allows for the transfer of info from text field to other places
-                        //controller: arrController,
-                        decoration: InputDecoration(
-                          labelText: 'Airline',
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          DropdownMenu<airlineSwitcher>(
+                            initialSelection: null,
+                            controller: airlineController,
+                            // requestFocusOnTap is enabled/disabled by platforms when it is null.
+                            // On mobile platforms, this is false by default. Setting this to true will
+                            // trigger focus request on the text field and virtual keyboard will appear
+                            // afterward. On desktop platforms however, this defaults to true.
+                            requestFocusOnTap: true,
+                            label: const Text('Airline'),
+                            onSelected: (airlineSwitcher? airline) {
+                              setState(() {
+                                selectedAirline = airline;
+                              });
+                            },
+                            dropdownMenuEntries: airlineSwitcher.values
+                                .map<DropdownMenuEntry<airlineSwitcher>>(
+                                    (airlineSwitcher airline) {
+                              return DropdownMenuEntry<airlineSwitcher>(
+                                value: airline,
+                                label: airline.label,
+                                enabled: airline.label != 'Grey',
+                                style: MenuItemButton.styleFrom(
+                                  foregroundColor: airline.color,
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -242,8 +283,7 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                             _selectDate();
                           }),
                     ),
-                    //Search Submit button
-                    Padding(padding: const EdgeInsets.all(5.0)),
+
                     //Search Submit button
                     Padding(padding: const EdgeInsets.all(5.0)),
                     SizedBox(
