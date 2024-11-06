@@ -2,17 +2,32 @@ import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
 import 'package:chai/app/widgets/toasts.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
+import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => HomePageState();
+}
+
+class HomePageState extends ConsumerState<HomePage> {
+  HomePageState();
+
+  @override
+  void initState() {
+    super.initState();
+    final oneSignalService = ref.read(oneSignalServiceProvider);
+    oneSignalService.requestPermission();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
