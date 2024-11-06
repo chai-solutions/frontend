@@ -33,19 +33,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final status = ref.watch(authControllerProvider);
 
     return status.when(
-      data: (_) => realSplashScreen(context),
+      data: (_) => const RealSplashScreen(),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => realSplashScreen(context),
+      error: (_, __) => const RealSplashScreen(),
     );
   }
+}
 
-  Widget realSplashScreen(BuildContext context) {
+class RealSplashScreen extends StatelessWidget {
+  const RealSplashScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background2.png"),
+            //fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Goodbye, cruel world!'),
+            const Text('GateSoup'),
             ElevatedButton(
               onPressed: () {
                 context.go('/login');
@@ -64,7 +77,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     );
   }
 }
-
 
 // TODO:
 // splash screen
