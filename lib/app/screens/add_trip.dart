@@ -12,6 +12,7 @@ class _AddTripPageState extends State<AddTripPage> {
   final _departureController = TextEditingController();
   final _arrivalController = TextEditingController();
   final _airlineController = TextEditingController();
+  final _flightNumberController = TextEditingController();
   DateTime? _selectedDate;
 
   @override
@@ -19,6 +20,7 @@ class _AddTripPageState extends State<AddTripPage> {
     _departureController.dispose();
     _arrivalController.dispose();
     _airlineController.dispose();
+    _flightNumberController.dispose();
     super.dispose();
   }
 
@@ -98,6 +100,14 @@ class _AddTripPageState extends State<AddTripPage> {
               ),
             ),
             const SizedBox(height: 20.0),
+            TextField(
+              controller: _flightNumberController,
+              decoration: const InputDecoration(
+                labelText: 'Flight Number',
+                prefixIcon: Icon(Icons.confirmation_number),
+              ),
+            ),
+            const SizedBox(height: 20.0),
             Row(
               children: [
                 const Text(
@@ -121,6 +131,10 @@ class _AddTripPageState extends State<AddTripPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // Set button color to blue
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: () {
                     // Save the trip plan
                     // You may also want to add validation for input fields here
