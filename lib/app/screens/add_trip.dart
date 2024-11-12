@@ -10,6 +10,7 @@ class AddTripPage extends StatefulWidget {
 
 class _AddTripPageState extends State<AddTripPage> {
   final _departureController = TextEditingController();
+  final _connectingController = TextEditingController();
   final _arrivalController = TextEditingController();
   final _airlineController = TextEditingController();
   final _flightNumberController = TextEditingController();
@@ -18,6 +19,7 @@ class _AddTripPageState extends State<AddTripPage> {
   @override
   void dispose() {
     _departureController.dispose();
+    _connectingController.dispose();
     _arrivalController.dispose();
     _airlineController.dispose();
     _flightNumberController.dispose();
@@ -85,6 +87,14 @@ class _AddTripPageState extends State<AddTripPage> {
             ),
             const SizedBox(height: 20.0),
             TextField(
+              controller: _connectingController,
+              decoration: const InputDecoration(
+                labelText: 'Connecting Flight Airport',
+                prefixIcon: Icon(Icons.flight_class_sharp),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            TextField(
               controller: _arrivalController,
               decoration: const InputDecoration(
                 labelText: 'Arrival Airport',
@@ -132,8 +142,9 @@ class _AddTripPageState extends State<AddTripPage> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Set button color to blue
-                    foregroundColor: Colors.white,
+                    backgroundColor:
+                        Colors.blue, // Set button background to blue
+                    foregroundColor: Colors.white, // Set text color to white
                   ),
                   onPressed: () {
                     // Save the trip plan
