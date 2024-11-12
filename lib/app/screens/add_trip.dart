@@ -10,19 +10,25 @@ class AddTripPage extends StatefulWidget {
 
 class _AddTripPageState extends State<AddTripPage> {
   final _departureController = TextEditingController();
-  final _connectingController = TextEditingController();
   final _arrivalController = TextEditingController();
   final _airlineController = TextEditingController();
   final _flightNumberController = TextEditingController();
   DateTime? _selectedDate;
 
+  // List of controllers for connecting flights
+  List<TextEditingController> _connectingControllers = [
+    TextEditingController()
+  ];
+
   @override
   void dispose() {
     _departureController.dispose();
-    _connectingController.dispose();
     _arrivalController.dispose();
     _airlineController.dispose();
     _flightNumberController.dispose();
+    for (var controller in _connectingControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -38,6 +44,19 @@ class _AddTripPageState extends State<AddTripPage> {
         _selectedDate = picked;
       });
     }
+  }
+
+  void _addConnectingFlight() {
+    setState(() {
+      _connectingControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeConnectingFlight(int index) {
+    setState(() {
+      _connectingControllers[index].dispose(); // Dispose the removed controller
+      _connectingControllers.removeAt(index);
+    });
   }
 
   @override
@@ -86,13 +105,36 @@ class _AddTripPageState extends State<AddTripPage> {
               ),
             ),
             const SizedBox(height: 20.0),
-            TextField(
-              controller: _connectingController,
-              decoration: const InputDecoration(
-                labelText: 'Connecting Flight Airport',
-                prefixIcon: Icon(Icons.flight_class_sharp),
-              ),
-            ),
+            // Display all connecting flight fields
+            ..._connectingControllers.asMap().entries.map((entry) {
+              int index = entry.key;
+              TextEditingController controller = entry.value;
+              return Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        labelText: 'Connecting Flight Airport ${index + 1}',
+                        prefixIcon: const Icon(Icons.airplanemode_on),
+                      ),
+                    ),
+                  ),
+                  // Only show the plus button next to the last field
+                  if (index == _connectingControllers.length - 1)
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: _addConnectingFlight,
+                    ),
+                  // Show the minus button if there are more than one connecting fields
+                  if (index > 0)
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () => _removeConnectingFlight(index),
+                    ),
+                ],
+              );
+            }).toList(),
             const SizedBox(height: 20.0),
             TextField(
               controller: _arrivalController,
