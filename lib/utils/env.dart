@@ -24,6 +24,7 @@ class Env {
   }
 
   String get baseURL => _str('BASE_URL');
+  String get onesignalAppID => _str('ONESIGNAL_APP_ID');
 
   Future<void> _loadEnv() async {
     await dotenv.load();

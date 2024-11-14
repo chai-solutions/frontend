@@ -1,22 +1,34 @@
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
-import 'package:chai/pages/add_trip.dart';
+import 'package:go_router/go_router.dart';
 import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
+import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
 import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import 'add_trip.dart';
-
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => HomePageState();
+}
+
+class HomePageState extends ConsumerState<HomePage> {
+  HomePageState();
+
+  @override
+  void initState() {
+    super.initState();
+    final oneSignalService = ref.read(oneSignalServiceProvider);
+    oneSignalService.requestPermission();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
@@ -38,14 +50,25 @@ class FlightPlanList extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 30, bottom: 1, left: 16),
-          child: Text(
-            'My Trips',
-            style: TextStyle(
-              fontSize: 22.0,
-              fontWeight: FontWeight.bold,
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'My Trips',
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GSButton(
+                onPressed: () {
+                  context.go('/add-trip');
+                },
+                text: 'Add Plan',
+              ),
+            ],
           ),
         ),
         flightPlans.when(
@@ -62,36 +85,6 @@ class FlightPlanList extends ConsumerWidget {
                 ],
               ),
             ),
-          ),
-        ),
-        // Row of buttons at the bottom
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GSButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddTripPage()),
-                  );
-                },
-                text: 'Add Plan',
-              ),
-              GSButton(
-                onPressed: () async {
-                  final authController =
-                      ref.read(authControllerProvider.notifier);
-                  await authController.logout();
-                  if (context.mounted) {
-                    context.replace('/login');
-                  }
-                },
-                text: 'Logout',
-              ),
-            ],
           ),
         ),
       ],
