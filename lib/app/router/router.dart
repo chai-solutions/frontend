@@ -1,3 +1,4 @@
+import 'package:chai/app/screens/add_trip.dart';
 import 'package:chai/app/screens/about.dart';
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
@@ -34,7 +35,13 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) {
-          return const HomePage();
+          return HomePage();
+        },
+      ),
+      GoRoute(
+        path: '/add-trip',
+        builder: (context, state) {
+          return const AddTripPage();
         },
       ),
       GoRoute(

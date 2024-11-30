@@ -1,6 +1,7 @@
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
-import 'package:chai/app/widgets/toasts.dart';
+import 'package:go_router/go_router.dart';
+import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
@@ -63,11 +64,7 @@ class FlightPlanList extends ConsumerWidget {
               ),
               GSButton(
                 onPressed: () {
-                  warningToast(
-                    context: context,
-                    title: 'Unimplemented',
-                    message: "We'll get around to this soon!",
-                  );
+                  context.go('/add-trip');
                 },
                 text: 'Add Plan',
               ),
