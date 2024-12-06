@@ -10,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+class AddDeleteFlight extends ConsumerStatefulWidget {
+  const AddDeleteFlight({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => HomePageState();
+  ConsumerState<AddDeleteFlight> createState() => AddDeleteFlightState();
 }
 
-class HomePageState extends ConsumerState<HomePage> {
-  HomePageState();
+class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
+  AddDeleteFlightState();
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class FlightPlanList extends ConsumerWidget {
               ),
               GSButton(
                 onPressed: () {
-                  context.go('/areYouSure');
+                  context.go('/addPlan');
                 },
                 text: 'Create New Plan',
               ),
