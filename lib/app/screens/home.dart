@@ -17,6 +17,8 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => HomePageState();
 }
 
+int checkPlans = 0;
+
 class HomePageState extends ConsumerState<HomePage> {
   HomePageState();
 
@@ -78,7 +80,16 @@ class FlightPlanList extends ConsumerWidget {
             children: [
               GSButton(
                 onPressed: () {
-                  context.go('/choosePlan');
+                  if (checkPlans != 0) {
+                    context.go('/choosePlan');
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('No Flight Plans To Edit!'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 text: 'Edit Existing Plan',
               ),
@@ -110,6 +121,7 @@ class FlightPlanList extends ConsumerWidget {
       return const Expanded(
         child: Center(
           child: Text('No flight plans have been made.'),
+          //checkPlans = checkPlans + 1;
         ),
       );
     }
@@ -118,6 +130,7 @@ class FlightPlanList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: plans.length,
         itemBuilder: (context, index) {
+          checkPlans = checkPlans + 1;
           final plan = plans[index];
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
@@ -127,7 +140,7 @@ class FlightPlanList extends ConsumerWidget {
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ListTile(
-              title: Text(startDate),
+              title: Text("Plan ID: " + plan.id.toString() + "\n" + startDate),
               subtitle: Text(
                   '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
               trailing: const Icon(Icons.arrow_forward),
