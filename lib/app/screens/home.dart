@@ -137,13 +137,21 @@ class FlightPlanList extends ConsumerWidget {
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: ListTile(
-              title: Text("Plan ID: " + plan.id.toString() + "\n" + startDate),
-              subtitle: Text(
-                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-              trailing: const Icon(Icons.arrow_forward),
+          return InkWell(
+            onTap: () {
+              // Navigate to new placeholder page
+              context.go('/searchHome');
+            },
+            child: Card(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: ListTile(
+                title:
+                    Text("Plan ID: " + plan.id.toString() + "\n" + startDate),
+                subtitle: Text(
+                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+                trailing: const Icon(Icons.arrow_forward),
+              ),
             ),
           );
         },
