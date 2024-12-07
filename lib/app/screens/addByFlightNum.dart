@@ -103,8 +103,9 @@ class _AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                 content: Text('Flight added to plan.'),
               ),
             );
+            //send user back to flight plan when finished adding flight to plan
             if (context.mounted) {
-              context.go('/Home');
+              context.go('/addDeleteFlight/$planId');
             }
           });
           return data;
@@ -156,9 +157,21 @@ class _AddByFlightNumState extends ConsumerState<AddByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 5.0),
+                padding: EdgeInsets.only(bottom: 150.0),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20.0,
+                      ),
+                      child: Text(
+                        'Add Flight to Plan $planId',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     //USER INPUT FIELD HERE
                     SizedBox(
                       width: 300,
@@ -226,23 +239,23 @@ class _AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
-                    //number of flight plan that flight will be added to
-                    Padding(padding: EdgeInsets.only(bottom: 20.0)),
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        //allows for the transfer of info from text field to other places
-                        controller: planNumController,
-                        //only numbers allowed in text field
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          labelText: 'Flight Plan ID',
-                        ),
-                      ),
-                    ),
+                    // //number of flight plan that flight will be added to
+                    // Padding(padding: EdgeInsets.only(bottom: 20.0)),
+                    // SizedBox(
+                    //   width: 300,
+                    //   child: TextField(
+                    //     //allows for the transfer of info from text field to other places
+                    //     controller: planNumController,
+                    //     //only numbers allowed in text field
+                    //     keyboardType: TextInputType.number,
+                    //     inputFormatters: [
+                    //       FilteringTextInputFormatter.digitsOnly
+                    //     ],
+                    //     decoration: InputDecoration(
+                    //       labelText: 'Flight Plan ID',
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
@@ -252,23 +265,11 @@ class _AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                               ref.read(authControllerProvider.notifier);
                           //context.go('/home');
                           String userInput = myController.text;
-                          print("test: " + planNumController.text);
-                          if (planNumController.text.isEmpty) {
-                            // Show error message (replace with your preferred method)
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please enter a flight plan ID'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            return; // Exit the function if there's no input
-                          } else {
-                            //convert flight plan number input into int
-                            int userPlanNum = int.parse(planNumController.text);
-                            print('Adding Flight: $userInput');
-                            final flightData =
-                                await addToFlightPlan(userInput, userPlanNum);
-                          }
+                          //use url flight plan id for json post
+                          int userPlanNum = planId;
+                          print('Adding Flight: $userInput');
+                          final flightData =
+                              await addToFlightPlan(userInput, userPlanNum);
                         },
                         label: const Text('Add Flight'),
                         icon: const Icon(Icons.arrow_forward),
