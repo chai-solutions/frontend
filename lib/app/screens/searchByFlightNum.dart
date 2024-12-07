@@ -98,6 +98,9 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                 content: Text('Flight added to plan.'),
               ),
             );
+            if (context.mounted) {
+              context.go('/Home');
+            }
           });
           return data;
         } else {

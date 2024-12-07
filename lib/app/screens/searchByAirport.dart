@@ -189,6 +189,9 @@ class _SearchByAirportState extends ConsumerState<SearchByAirport> {
                 content: Text('Flight added to plan.'),
               ),
             );
+            if (context.mounted) {
+              context.go('/Home');
+            }
           });
           return data;
         } else {

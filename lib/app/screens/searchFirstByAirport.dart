@@ -160,6 +160,9 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                 content: Text('Created flight plan.'),
               ),
             );
+            if (context.mounted) {
+              context.go('/Home');
+            }
           });
           return data;
         } else {
