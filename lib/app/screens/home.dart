@@ -125,13 +125,14 @@ class FlightPlanList extends ConsumerWidget {
         ),
       );
     }
-
+    // Create a Set to store unique plan IDs
+    Set<int> uniquePlanIds = {};
     return Expanded(
       child: ListView.builder(
-        itemCount: plans.length,
+        itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
         itemBuilder: (context, index) {
-          checkPlans = checkPlans + 1;
-          final plan = plans[index];
+          final uniqueId = uniquePlanIds.elementAt(index);
+          final plan = plans.firstWhere((plan) => plan.id == uniqueId);
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
@@ -139,7 +140,6 @@ class FlightPlanList extends ConsumerWidget {
 
           return InkWell(
             onTap: () {
-              // Navigate to new placeholder page
               context.go('/addDeleteFlight/${plan.id}');
             },
             child: Card(
@@ -147,8 +147,10 @@ class FlightPlanList extends ConsumerWidget {
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
-                title:
-                    Text("Plan ID: " + plan.id.toString() + "\n" + startDate),
+                title: Text("Plan ID Number: " +
+                    plan.id.toString() +
+                    "\n" +
+                    "First Flight In Plan: "),
                 subtitle: Text(
                     '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
                 trailing: const Icon(Icons.arrow_forward),
