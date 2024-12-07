@@ -47,7 +47,7 @@ class EditPlanHome extends ConsumerWidget {
               top: 20.0,
             ),
             child: Text(
-              'My Trips',
+              'Edit Flight Plan $inputPlanId',
               style: TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
