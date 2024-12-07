@@ -17,6 +17,9 @@ import 'package:chai/app/screens/areYouSure.dart';
 import 'package:chai/app/screens/searchFirstHome.dart';
 import 'package:chai/app/screens/searchFirstByFlightNum.dart';
 import 'package:chai/app/screens/searchFirstByAirport.dart';
+import 'package:chai/app/screens/deletePlan.dart';
+import 'package:chai/app/screens/addByAirport.dart';
+import 'package:chai/app/screens/addByFlightNum.dart';
 
 part 'router.g.dart';
 
@@ -107,6 +110,14 @@ GoRouter router(RouterRef ref) {
         },
       ),
       GoRoute(
+        path: '/deletePlan/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return DeletePlan(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
         path: '/areYouSure',
         builder: (context, state) {
           return const AreYouSure();
@@ -128,6 +139,22 @@ GoRouter router(RouterRef ref) {
         path: '/searchFirstByAirport',
         builder: (context, state) {
           return const SearchFirstByAirport();
+        },
+      ),
+      GoRoute(
+        path: '/addByFlightNum/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddByFlightNum(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/addByAirport/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddByAirport(inputPlanId: planId);
         },
       ),
     ],

@@ -11,9 +11,9 @@ import 'package:intl/intl.dart';
 
 final myController = TextEditingController();
 
-class EditPlanHome extends ConsumerWidget {
+class DeletePlan extends ConsumerWidget {
   final int? inputPlanId;
-  const EditPlanHome({Key? key, required this.inputPlanId}) : super(key: key);
+  const DeletePlan({Key? key, required this.inputPlanId}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
@@ -64,7 +64,7 @@ class EditPlanHome extends ConsumerWidget {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/addByAirport/$inputPlanId');
+                  context.go('/searchByAirport');
                 }
               },
               label: const Text('Search Flight By Airports'),
@@ -85,7 +85,7 @@ class EditPlanHome extends ConsumerWidget {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/addByFlightNum/$inputPlanId');
+                  context.go('/searchByFlightNum');
                 }
               },
               label: const Text('Search Flight By Flight Number'),
