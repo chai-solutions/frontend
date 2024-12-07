@@ -86,7 +86,7 @@ class FlightPlanList extends ConsumerWidget {
                 onPressed: () {
                   context.go('/editPlanHome/$planId');
                 },
-                text: 'Edit This Plan',
+                text: 'Add Flight',
               ),
             ],
           ),
@@ -133,6 +133,7 @@ class FlightPlanList extends ConsumerWidget {
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
+          //makes cards clickable for deletion?
           return InkWell(
             onTap: () {
               context.go('/addDeleteFlight/${plan.id}');
