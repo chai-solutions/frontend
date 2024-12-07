@@ -91,9 +91,11 @@ GoRouter router(RouterRef ref) {
         },
       ),
       GoRoute(
-        path: '/addDeleteFlight',
+        path: '/addDeleteFlight/:planId',
         builder: (context, state) {
-          return const AddDeleteFlight();
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddDeleteFlight(inputPlanId: planId);
         },
       ),
       GoRoute(

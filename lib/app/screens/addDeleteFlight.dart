@@ -11,20 +11,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class AddDeleteFlight extends ConsumerStatefulWidget {
-  const AddDeleteFlight({super.key});
+  final int? inputPlanId;
+  const AddDeleteFlight({Key? key, required this.inputPlanId})
+      : super(key: key);
+
+  get inputFlightId => inputPlanId;
 
   @override
   ConsumerState<AddDeleteFlight> createState() => AddDeleteFlightState();
 }
 
+int planId = 0;
+
 class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
   AddDeleteFlightState();
-
   @override
   void initState() {
     super.initState();
     final oneSignalService = ref.read(oneSignalServiceProvider);
     oneSignalService.requestPermission();
+    planId = widget.inputPlanId!;
   }
 
   @override
@@ -32,9 +38,10 @@ class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
     final user = ref.watch(currentUserProvider);
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
+    planId = widget.inputFlightId;
 
     return MainPageScaffold(
-      title: name != null ? 'Welcome, $name!' : null,
+      title: name != null ? 'Flight Plan ${widget.inputFlightId}' : null,
       child: const FlightPlanList(),
     );
   }
@@ -46,7 +53,6 @@ class FlightPlanList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flightPlans = ref.watch(flightPlanListProvider);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,32 +61,26 @@ class FlightPlanList extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'My Trips',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0.0,
                 ),
-              ),
-              GSButton(
-                onPressed: () {
-                  context.go('/addPlan');
-                },
-                text: 'Create New Plan',
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GSButton(
-                onPressed: () {
-                  context.go('/choosePlan');
-                },
-                text: 'Edit Existing Plan',
+                //button to go back home
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    final authController =
+                        ref.read(authControllerProvider.notifier);
+                    if (context.mounted) {
+                      context.go('/home');
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Back Home'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.white, // Set the background color to white
+                  ),
+                ),
               ),
             ],
           ),
@@ -123,16 +123,18 @@ class FlightPlanList extends ConsumerWidget {
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
-
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: ListTile(
-              title: Text(startDate),
-              subtitle: Text(
-                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-              trailing: const Icon(Icons.arrow_forward),
-            ),
-          );
+          if (plan.id == planId) {
+            return Card(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: ListTile(
+                title: Text(startDate),
+                subtitle: Text(
+                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+                trailing: const Icon(Icons.arrow_forward),
+              ),
+            );
+          }
         },
       ),
     );

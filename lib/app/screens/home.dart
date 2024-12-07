@@ -140,9 +140,10 @@ class FlightPlanList extends ConsumerWidget {
           return InkWell(
             onTap: () {
               // Navigate to new placeholder page
-              context.go('/searchHome');
+              context.go('/addDeleteFlight/${plan.id}');
             },
             child: Card(
+              color: const Color.fromARGB(255, 86, 105, 114),
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
