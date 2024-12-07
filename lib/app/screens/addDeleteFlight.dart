@@ -116,25 +116,25 @@ class FlightPlanList extends ConsumerWidget {
 
     return Expanded(
       child: ListView.builder(
-        itemCount: plans.length,
+        itemCount: plans.where((plan) => plan.id == planId).length,
         itemBuilder: (context, index) {
-          final plan = plans[index];
+          final filteredPlans =
+              plans.where((plan) => plan.id == planId).toList();
+          final plan = filteredPlans[index];
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
-          if (plan.id == planId) {
-            return Card(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: ListTile(
-                title: Text(startDate),
-                subtitle: Text(
-                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-                trailing: const Icon(Icons.arrow_forward),
-              ),
-            );
-          }
+
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ListTile(
+              title: Text(startDate),
+              subtitle: Text(
+                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+              trailing: const Icon(Icons.arrow_forward),
+            ),
+          );
         },
       ),
     );
