@@ -12,7 +12,7 @@ import 'package:chai/app/screens/searchByFlightNum.dart';
 import 'package:chai/app/screens/searchByAirport.dart';
 import 'package:chai/app/screens/addPlan.dart';
 import 'package:chai/app/screens/addDeleteFlight.dart';
-import 'package:chai/app/screens/choosePlan.dart';
+import 'package:chai/app/screens/editPlanHome.dart';
 import 'package:chai/app/screens/areYouSure.dart';
 import 'package:chai/app/screens/searchFirstHome.dart';
 import 'package:chai/app/screens/searchFirstByFlightNum.dart';
@@ -99,9 +99,11 @@ GoRouter router(RouterRef ref) {
         },
       ),
       GoRoute(
-        path: '/choosePlan',
+        path: '/editPlanHome/:planId',
         builder: (context, state) {
-          return const ChoosePlan();
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return EditPlanHome(inputPlanId: planId);
         },
       ),
       GoRoute(

@@ -11,8 +11,9 @@ import 'package:intl/intl.dart';
 
 final myController = TextEditingController();
 
-class ChoosePlan extends ConsumerWidget {
-  const ChoosePlan({super.key});
+class EditPlanHome extends ConsumerWidget {
+  final int? inputPlanId;
+  const EditPlanHome({Key? key, required this.inputPlanId}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
@@ -30,11 +31,11 @@ class ChoosePlan extends ConsumerWidget {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/home');
+                  context.go('/addDeleteFlight/$inputPlanId');
                 }
               },
               icon: const Icon(Icons.arrow_back),
-              label: const Text('Back Home'),
+              label: const Text('Back'),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Colors.white, // Set the background color to white

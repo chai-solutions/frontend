@@ -14,7 +14,7 @@ class AddDeleteFlight extends ConsumerStatefulWidget {
   final int? inputPlanId;
   const AddDeleteFlight({Key? key, required this.inputPlanId})
       : super(key: key);
-
+  //gets flight plan number for this page
   get inputFlightId => inputPlanId;
 
   @override
@@ -30,7 +30,7 @@ class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
     super.initState();
     final oneSignalService = ref.read(oneSignalServiceProvider);
     oneSignalService.requestPermission();
-    planId = widget.inputPlanId!;
+    planId = widget.inputPlanId!; //sets this screen's current flight plan
   }
 
   @override
@@ -82,6 +82,12 @@ class FlightPlanList extends ConsumerWidget {
                   ),
                 ),
               ),
+              GSButton(
+                onPressed: () {
+                  context.go('/editPlanHome/$planId');
+                },
+                text: 'Edit This Plan',
+              ),
             ],
           ),
         ),
@@ -116,6 +122,7 @@ class FlightPlanList extends ConsumerWidget {
 
     return Expanded(
       child: ListView.builder(
+        //filters out flights from other plans
         itemCount: plans.where((plan) => plan.id == planId).length,
         itemBuilder: (context, index) {
           final filteredPlans =

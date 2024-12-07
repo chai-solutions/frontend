@@ -78,21 +78,21 @@ class FlightPlanList extends ConsumerWidget {
           child: Row(
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GSButton(
-                onPressed: () {
-                  if (checkPlans != 0) {
-                    context.go('/choosePlan');
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('No Flight Plans To Edit!'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                text: 'Edit Existing Plan',
-              ),
+              // GSButton(
+              //   onPressed: () {
+              //     if (checkPlans != 0) {
+              //       context.go('/choosePlan');
+              //     } else {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         SnackBar(
+              //           content: Text('No Flight Plans To Edit!'),
+              //           backgroundColor: Colors.red,
+              //         ),
+              //       );
+              //     }
+              //   },
+              //   text: 'Edit Existing Plan',
+              // ),
             ],
           ),
         ),
@@ -131,6 +131,7 @@ class FlightPlanList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
         itemBuilder: (context, index) {
+          //filters out duplicate flight id flights
           final uniqueId = uniquePlanIds.elementAt(index);
           final plan = plans.firstWhere((plan) => plan.id == uniqueId);
           final startDate =
