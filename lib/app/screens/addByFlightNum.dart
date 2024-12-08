@@ -239,23 +239,7 @@ class _AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
-                    // //number of flight plan that flight will be added to
-                    // Padding(padding: EdgeInsets.only(bottom: 20.0)),
-                    // SizedBox(
-                    //   width: 300,
-                    //   child: TextField(
-                    //     //allows for the transfer of info from text field to other places
-                    //     controller: planNumController,
-                    //     //only numbers allowed in text field
-                    //     keyboardType: TextInputType.number,
-                    //     inputFormatters: [
-                    //       FilteringTextInputFormatter.digitsOnly
-                    //     ],
-                    //     decoration: InputDecoration(
-                    //       labelText: 'Flight Plan ID',
-                    //     ),
-                    //   ),
-                    // ),
+
                     Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,

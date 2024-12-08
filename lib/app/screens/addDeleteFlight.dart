@@ -107,6 +107,21 @@ class FlightPlanList extends ConsumerWidget {
             ),
           ),
         ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(8.0), // Adjust radius as needed
+          ),
+          child: TextButton(
+            onPressed: () {
+              context.go('/areYouSureDelPlan/$planId');
+            },
+            child: Text(
+              'Permanently Delete Plan',
+              style: TextStyle(color: Colors.white), // Text color for contrast
+            ),
+          ),
+        )
       ],
     );
   }

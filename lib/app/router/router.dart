@@ -20,6 +20,7 @@ import 'package:chai/app/screens/searchFirstByAirport.dart';
 import 'package:chai/app/screens/deletePlan.dart';
 import 'package:chai/app/screens/addByAirport.dart';
 import 'package:chai/app/screens/addByFlightNum.dart';
+import 'package:chai/app/screens/areYouSureDelPlan.dart';
 
 part 'router.g.dart';
 
@@ -155,6 +156,14 @@ GoRouter router(RouterRef ref) {
           final planIdString = state.pathParameters['planId'];
           final planId = int.tryParse(planIdString ?? '');
           return AddByAirport(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/areYouSureDelPlan/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AreYouSureDelPlan(inputPlanId: planId);
         },
       ),
     ],
