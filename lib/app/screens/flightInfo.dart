@@ -10,21 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class AddDeleteFlight extends ConsumerStatefulWidget {
+class FlightInfo extends ConsumerStatefulWidget {
   final int? inputPlanId;
-  const AddDeleteFlight({Key? key, required this.inputPlanId})
+  final int? inputFlightIndex;
+
+  const FlightInfo(
+      {Key? key, required this.inputPlanId, required this.inputFlightIndex})
       : super(key: key);
+
   //gets flight plan number for this page
   get inputFlightId => inputPlanId;
+  //get index of individual flight in flight plan
+  get inputPlanIndex => inputFlightIndex;
 
   @override
-  ConsumerState<AddDeleteFlight> createState() => AddDeleteFlightState();
+  ConsumerState<FlightInfo> createState() => FlightInfoState();
 }
 
 int planId = 0;
+int planIndex = 0;
 
-class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
-  AddDeleteFlightState();
+class FlightInfoState extends ConsumerState<FlightInfo> {
+  FlightInfoState();
   @override
   void initState() {
     super.initState();
@@ -39,9 +46,10 @@ class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
     planId = widget.inputFlightId;
-
+    planIndex = widget.inputFlightIndex! + 1;
     return MainPageScaffold(
-      title: name != null ? 'Flight Plan ${widget.inputFlightId}' : null,
+      title:
+          name != null ? 'Flight Plan ${planId}\nFlight #${planIndex}' : null,
       child: const FlightPlanList(),
     );
   }
@@ -71,22 +79,16 @@ class FlightPlanList extends ConsumerWidget {
                     final authController =
                         ref.read(authControllerProvider.notifier);
                     if (context.mounted) {
-                      context.go('/home');
+                      context.go('/addDeleteFlight/${planId}');
                     }
                   },
                   icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back Home'),
+                  label: const Text('Back To Plan'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         Colors.white, // Set the background color to white
                   ),
                 ),
-              ),
-              GSButton(
-                onPressed: () {
-                  context.go('/editPlanHome/$planId');
-                },
-                text: 'Add Flight',
               ),
             ],
           ),
@@ -114,10 +116,10 @@ class FlightPlanList extends ConsumerWidget {
           ),
           child: TextButton(
             onPressed: () {
-              context.go('/areYouSureDelPlan/$planId');
+              context.go('/areYouSureDelFlight/$planId/$planIndex');
             },
             child: Text(
-              'Permanently Delete Plan',
+              'Permanently Delete This Flgiht From Plan',
               style: TextStyle(color: Colors.white), // Text color for contrast
             ),
           ),
@@ -137,32 +139,28 @@ class FlightPlanList extends ConsumerWidget {
 
     return Expanded(
       child: ListView.builder(
-        //filters out flights from other plans
-        itemCount: plans.where((plan) => plan.id == planId).length,
+        //single out specific desired flight
+        itemCount: 1,
         itemBuilder: (context, index) {
           final filteredPlans =
-              plans.where((plan) => plan.id == planId).toList();
-          final plan = filteredPlans[index];
+              plans.where((plan) => plan.id == planId).toList()[planIndex - 1];
+          final plan = filteredPlans;
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
-          //makes cards clickable for moe info
+          //makes cards clickable for deletion?
           return InkWell(
-            onTap: () {
-              //context.go('/flightInfo');
-              context.go('/flightInfo/${plan.id}/$index');
-            },
+            onTap: () {},
             child: Card(
               color: const Color.fromARGB(255, 86, 105, 114),
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
-                title: Text(plan.flightNumber.toString() + "\n" + startDate),
-                subtitle: Text(
-                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-                trailing: const Icon(Icons.info),
+                title: Text(
+                    "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: ${startDate}\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime"),
+                subtitle: Text(''),
               ),
             ),
           );
