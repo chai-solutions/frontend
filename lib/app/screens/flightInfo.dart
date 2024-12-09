@@ -24,14 +24,14 @@ class FlightInfo extends ConsumerStatefulWidget {
   get inputPlanIndex => inputFlightIndex;
 
   @override
-  ConsumerState<FlightInfo> createState() => FlightInfoState();
+  ConsumerState<FlightInfo> createState() => _FlightInfoState();
 }
 
 int planId = 0;
 int planIndex = 0;
 
-class FlightInfoState extends ConsumerState<FlightInfo> {
-  FlightInfoState();
+class _FlightInfoState extends ConsumerState<FlightInfo> {
+  _FlightInfoState();
   @override
   void initState() {
     super.initState();
