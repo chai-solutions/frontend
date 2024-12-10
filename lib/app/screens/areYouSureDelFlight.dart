@@ -136,7 +136,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
                         return SizedBox(
                           width: maxWidth,
                           child: Text(
-                            'Are you sure you want to permanently delete this flight $flightIndex from plan $planId?',
+                            'Are you sure you want to permanently delete this flight from plan $planId?',
                             style: TextStyle(
                               fontSize: 22.0,
                               fontWeight: FontWeight.bold,
