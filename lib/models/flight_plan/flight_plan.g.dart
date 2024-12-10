@@ -9,6 +9,7 @@ part of 'flight_plan.dart';
 _$FlightPlanImpl _$$FlightPlanImplFromJson(Map<String, dynamic> json) =>
     _$FlightPlanImpl(
       id: (json['flight_plan_id'] as num).toInt(),
+      indvFlightId: (json['indv_flight_id'] as num).toInt(),
       flightNumber: json['flight_number'] as String,
       departureAirportName: json['dep_airport'] as String,
       departureAirportCode: json['iata'] as String,
@@ -23,6 +24,7 @@ _$FlightPlanImpl _$$FlightPlanImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$FlightPlanImplToJson(_$FlightPlanImpl instance) =>
     <String, dynamic>{
       'flight_plan_id': instance.id,
+      'indv_flight_id': instance.indvFlightId,
       'flight_number': instance.flightNumber,
       'dep_airport': instance.departureAirportName,
       'iata': instance.departureAirportCode,

@@ -1,3 +1,4 @@
+import 'package:chai/app/screens/add_trip.dart';
 import 'package:chai/app/screens/about.dart';
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
@@ -6,6 +7,22 @@ import 'package:chai/app/screens/settings.dart';
 import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:chai/app/screens/searchHome.dart';
+import 'package:chai/app/screens/searchByFlightNum.dart';
+import 'package:chai/app/screens/searchByAirport.dart';
+import 'package:chai/app/screens/addPlan.dart';
+import 'package:chai/app/screens/addDeleteFlight.dart';
+import 'package:chai/app/screens/editPlanHome.dart';
+import 'package:chai/app/screens/areYouSure.dart';
+import 'package:chai/app/screens/searchFirstHome.dart';
+import 'package:chai/app/screens/searchFirstByFlightNum.dart';
+import 'package:chai/app/screens/searchFirstByAirport.dart';
+import 'package:chai/app/screens/deletePlan.dart';
+import 'package:chai/app/screens/addByAirport.dart';
+import 'package:chai/app/screens/addByFlightNum.dart';
+import 'package:chai/app/screens/areYouSureDelPlan.dart';
+import 'package:chai/app/screens/flightInfo.dart';
+import 'package:chai/app/screens/areYouSureDelFlight.dart';
 
 part 'router.g.dart';
 
@@ -34,7 +51,13 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) {
-          return const HomePage();
+          return HomePage();
+        },
+      ),
+      GoRoute(
+        path: '/add-trip',
+        builder: (context, state) {
+          return const AddTripPage();
         },
       ),
       GoRoute(
@@ -47,6 +70,128 @@ GoRouter router(RouterRef ref) {
         path: '/about',
         builder: (context, state) {
           return const AboutPage();
+        },
+      ),
+      GoRoute(
+        path: '/searchHome',
+        builder: (context, state) {
+          return const SearchHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/searchByFlightNum',
+        builder: (context, state) {
+          return const SearchByFlightNum();
+        },
+      ),
+      GoRoute(
+        path: '/searchByAirport',
+        builder: (context, state) {
+          return const SearchByAirport();
+        },
+      ),
+      GoRoute(
+        path: '/addPlan',
+        builder: (context, state) {
+          return const AddPlan();
+        },
+      ),
+      GoRoute(
+        path: '/addDeleteFlight/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddDeleteFlight(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/editPlanHome/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return EditPlanHome(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/deletePlan/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return DeletePlan(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/areYouSure',
+        builder: (context, state) {
+          return const AreYouSure();
+        },
+      ),
+      GoRoute(
+        path: '/searchFirstHome',
+        builder: (context, state) {
+          return const SearchFirstHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/searchFirstByFlightNum',
+        builder: (context, state) {
+          return const SearchFirstByFlightNum();
+        },
+      ),
+      GoRoute(
+        path: '/searchFirstByAirport',
+        builder: (context, state) {
+          return const SearchFirstByAirport();
+        },
+      ),
+      GoRoute(
+        path: '/addByFlightNum/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddByFlightNum(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/addByAirport/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AddByAirport(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/areYouSureDelPlan/:planId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final planId = int.tryParse(planIdString ?? '');
+          return AreYouSureDelPlan(inputPlanId: planId);
+        },
+      ),
+      GoRoute(
+        path: '/flightInfo/:planId/:flightIndex',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final flightIndexString = state.pathParameters['flightIndex'];
+          final planId = int.tryParse(planIdString ?? '');
+          final flightIndex = int.tryParse(flightIndexString ?? '');
+          return FlightInfo(inputPlanId: planId, inputFlightIndex: flightIndex);
+        },
+      ),
+      GoRoute(
+        path: '/areYouSureDelFlight/:planId/:flightIndex/:flightId',
+        builder: (context, state) {
+          final planIdString = state.pathParameters['planId'];
+          final flightIndexString = state.pathParameters['flightIndex'];
+          final flightIdString = state.pathParameters['flightId'];
+          final planId = int.tryParse(planIdString ?? '');
+          final flightIndex = int.tryParse(flightIndexString ?? '');
+          final flightId = int.tryParse(flightIdString ?? '');
+          return AreYouSureDelFlight(
+            inputPlanId: planId,
+            inputFlightIndex: flightIndex,
+            inputFlightId: flightId,
+          );
         },
       )
     ],

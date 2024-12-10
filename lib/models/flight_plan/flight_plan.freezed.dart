@@ -22,6 +22,8 @@ FlightPlan _$FlightPlanFromJson(Map<String, dynamic> json) {
 mixin _$FlightPlan {
   @JsonKey(name: 'flight_plan_id')
   int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'indv_flight_id')
+  int get indvFlightId => throw _privateConstructorUsedError;
   @JsonKey(name: 'flight_number')
   String get flightNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'dep_airport')
@@ -59,6 +61,7 @@ abstract class $FlightPlanCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'flight_plan_id') int id,
+      @JsonKey(name: 'indv_flight_id') int indvFlightId,
       @JsonKey(name: 'flight_number') String flightNumber,
       @JsonKey(name: 'dep_airport') String departureAirportName,
       @JsonKey(name: 'iata') String departureAirportCode,
@@ -86,6 +89,7 @@ class _$FlightPlanCopyWithImpl<$Res, $Val extends FlightPlan>
   @override
   $Res call({
     Object? id = null,
+    Object? indvFlightId = null,
     Object? flightNumber = null,
     Object? departureAirportName = null,
     Object? departureAirportCode = null,
@@ -100,6 +104,10 @@ class _$FlightPlanCopyWithImpl<$Res, $Val extends FlightPlan>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      indvFlightId: null == indvFlightId
+          ? _value.indvFlightId
+          : indvFlightId // ignore: cast_nullable_to_non_nullable
               as int,
       flightNumber: null == flightNumber
           ? _value.flightNumber
@@ -151,6 +159,7 @@ abstract class _$$FlightPlanImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'flight_plan_id') int id,
+      @JsonKey(name: 'indv_flight_id') int indvFlightId,
       @JsonKey(name: 'flight_number') String flightNumber,
       @JsonKey(name: 'dep_airport') String departureAirportName,
       @JsonKey(name: 'iata') String departureAirportCode,
@@ -176,6 +185,7 @@ class __$$FlightPlanImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? indvFlightId = null,
     Object? flightNumber = null,
     Object? departureAirportName = null,
     Object? departureAirportCode = null,
@@ -190,6 +200,10 @@ class __$$FlightPlanImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      indvFlightId: null == indvFlightId
+          ? _value.indvFlightId
+          : indvFlightId // ignore: cast_nullable_to_non_nullable
               as int,
       flightNumber: null == flightNumber
           ? _value.flightNumber
@@ -236,6 +250,7 @@ class __$$FlightPlanImplCopyWithImpl<$Res>
 class _$FlightPlanImpl implements _FlightPlan {
   _$FlightPlanImpl(
       {@JsonKey(name: 'flight_plan_id') required this.id,
+      @JsonKey(name: 'indv_flight_id') required this.indvFlightId,
       @JsonKey(name: 'flight_number') required this.flightNumber,
       @JsonKey(name: 'dep_airport') required this.departureAirportName,
       @JsonKey(name: 'iata') required this.departureAirportCode,
@@ -252,6 +267,9 @@ class _$FlightPlanImpl implements _FlightPlan {
   @override
   @JsonKey(name: 'flight_plan_id')
   final int id;
+  @override
+  @JsonKey(name: 'indv_flight_id')
+  final int indvFlightId;
   @override
   @JsonKey(name: 'flight_number')
   final String flightNumber;
@@ -282,7 +300,7 @@ class _$FlightPlanImpl implements _FlightPlan {
 
   @override
   String toString() {
-    return 'FlightPlan(id: $id, flightNumber: $flightNumber, departureAirportName: $departureAirportName, departureAirportCode: $departureAirportCode, arrivalAirportName: $arrivalAirportName, arrivalAirportCode: $arrivalAirportCode, scheduledDepartureTime: $scheduledDepartureTime, arrivalAirportTime: $arrivalAirportTime, actualDepartureTime: $actualDepartureTime, actualArrivalTime: $actualArrivalTime)';
+    return 'FlightPlan(id: $id, indvFlightId: $indvFlightId, flightNumber: $flightNumber, departureAirportName: $departureAirportName, departureAirportCode: $departureAirportCode, arrivalAirportName: $arrivalAirportName, arrivalAirportCode: $arrivalAirportCode, scheduledDepartureTime: $scheduledDepartureTime, arrivalAirportTime: $arrivalAirportTime, actualDepartureTime: $actualDepartureTime, actualArrivalTime: $actualArrivalTime)';
   }
 
   @override
@@ -291,6 +309,8 @@ class _$FlightPlanImpl implements _FlightPlan {
         (other.runtimeType == runtimeType &&
             other is _$FlightPlanImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.indvFlightId, indvFlightId) ||
+                other.indvFlightId == indvFlightId) &&
             (identical(other.flightNumber, flightNumber) ||
                 other.flightNumber == flightNumber) &&
             (identical(other.departureAirportName, departureAirportName) ||
@@ -316,6 +336,7 @@ class _$FlightPlanImpl implements _FlightPlan {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      indvFlightId,
       flightNumber,
       departureAirportName,
       departureAirportCode,
@@ -345,6 +366,7 @@ class _$FlightPlanImpl implements _FlightPlan {
 abstract class _FlightPlan implements FlightPlan {
   factory _FlightPlan(
       {@JsonKey(name: 'flight_plan_id') required final int id,
+      @JsonKey(name: 'indv_flight_id') required final int indvFlightId,
       @JsonKey(name: 'flight_number') required final String flightNumber,
       @JsonKey(name: 'dep_airport') required final String departureAirportName,
       @JsonKey(name: 'iata') required final String departureAirportCode,
@@ -365,6 +387,9 @@ abstract class _FlightPlan implements FlightPlan {
   @override
   @JsonKey(name: 'flight_plan_id')
   int get id;
+  @override
+  @JsonKey(name: 'indv_flight_id')
+  int get indvFlightId;
   @override
   @JsonKey(name: 'flight_number')
   String get flightNumber;

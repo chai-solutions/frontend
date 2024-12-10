@@ -1,6 +1,7 @@
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
-import 'package:chai/app/widgets/toasts.dart';
+import 'package:go_router/go_router.dart';
+import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
@@ -15,6 +16,8 @@ class HomePage extends ConsumerStatefulWidget {
   @override
   ConsumerState<HomePage> createState() => HomePageState();
 }
+
+int checkPlans = 0;
 
 class HomePageState extends ConsumerState<HomePage> {
   HomePageState();
@@ -63,14 +66,33 @@ class FlightPlanList extends ConsumerWidget {
               ),
               GSButton(
                 onPressed: () {
-                  warningToast(
-                    context: context,
-                    title: 'Unimplemented',
-                    message: "We'll get around to this soon!",
-                  );
+                  context.go('/areYouSure');
                 },
-                text: 'Add Plan',
+                text: 'Create New Plan',
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // GSButton(
+              //   onPressed: () {
+              //     if (checkPlans != 0) {
+              //       context.go('/choosePlan');
+              //     } else {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         SnackBar(
+              //           content: Text('No Flight Plans To Edit!'),
+              //           backgroundColor: Colors.red,
+              //         ),
+              //       );
+              //     }
+              //   },
+              //   text: 'Edit Existing Plan',
+              // ),
             ],
           ),
         ),
@@ -99,27 +121,41 @@ class FlightPlanList extends ConsumerWidget {
       return const Expanded(
         child: Center(
           child: Text('No flight plans have been made.'),
+          //checkPlans = checkPlans + 1;
         ),
       );
     }
-
+    // Create a Set to store unique plan IDs
+    Set<int> uniquePlanIds = {};
     return Expanded(
       child: ListView.builder(
-        itemCount: plans.length,
+        itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
         itemBuilder: (context, index) {
-          final plan = plans[index];
+          //filters out duplicate flight id flights
+          final uniqueId = uniquePlanIds.elementAt(index);
+          final plan = plans.firstWhere((plan) => plan.id == uniqueId);
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: ListTile(
-              title: Text(startDate),
-              subtitle: Text(
-                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-              trailing: const Icon(Icons.arrow_forward),
+          return InkWell(
+            onTap: () {
+              context.go('/addDeleteFlight/${plan.id}');
+            },
+            child: Card(
+              color: const Color.fromARGB(255, 86, 105, 114),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: ListTile(
+                title: Text("Plan ID Number: " +
+                    plan.id.toString() +
+                    "\n" +
+                    "First Flight In Plan: "),
+                subtitle: Text(
+                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+                trailing: const Icon(Icons.arrow_forward),
+              ),
             ),
           );
         },
