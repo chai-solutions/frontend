@@ -105,7 +105,7 @@ class _AddByAirportState extends ConsumerState<AddByAirport> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text('Error'),
-                content: Text('Invalid flight code.'),
+                content: Text('Invalid flight data.'),
               ),
             );
           });

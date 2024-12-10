@@ -136,7 +136,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/searchHome');
+                  context.go('/searchFirstHome');
                 }
               },
               icon: const Icon(Icons.arrow_back),

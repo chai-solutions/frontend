@@ -69,7 +69,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
             '/flights?departure_airport=$depAir&arrival_airport=$arrAir&sched_dep_time=$inputDate');
         final statusCode = response.statusCode;
         //flight found
-        if (statusCode == 201) {
+        if (statusCode == 200) {
           final listData = jsonDecode(response.body) as List<dynamic>;
 
           //REPLACE LATER!!! just gets information on first flight meeting parameters, must display flights as a list when we get more
@@ -150,7 +150,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
             .post('/flight_plans', body: {"flightNumber": flightNum});
         final statusCode = response.statusCode;
         //flight found
-        if (statusCode == 200) {
+        if (statusCode == 201) {
           final data = jsonDecode(response.body) as Map<String, dynamic>;
           setState(() {
             showDialog(
@@ -174,7 +174,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
               builder: (context) => AlertDialog(
                 title: Text('Error'),
                 content: Text(
-                    'Could not add flight to flight plan. \nInvalid flight code.'),
+                    'Could not add flight to flight plan. \nInvalid flight info.'),
               ),
             );
           });
@@ -199,7 +199,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/searchHome');
+                  context.go('/searchFirstHome');
                 }
               },
               icon: const Icon(Icons.arrow_back),
@@ -239,41 +239,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                     ),
                     //Search Submit button
                     Padding(padding: const EdgeInsets.all(5.0)),
-                    SizedBox(
-                      width: 300,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          // DropdownMenu<airlineSwitcher>(
-                          //   initialSelection: null,
-                          //   controller: airlineController,
-                          //   // requestFocusOnTap is enabled/disabled by platforms when it is null.
-                          //   // On mobile platforms, this is false by default. Setting this to true will
-                          //   // trigger focus request on the text field and virtual keyboard will appear
-                          //   // afterward. On desktop platforms however, this defaults to true.
-                          //   requestFocusOnTap: true,
-                          //   label: const Text('Airline'),
-                          //   onSelected: (airlineSwitcher? airline) {
-                          //     setState(() {
-                          //       selectedAirline = airline;
-                          //     });
-                          //   },
-                          //   dropdownMenuEntries: airlineSwitcher.values
-                          //       .map<DropdownMenuEntry<airlineSwitcher>>(
-                          //           (airlineSwitcher airline) {
-                          //     return DropdownMenuEntry<airlineSwitcher>(
-                          //       value: airline,
-                          //       label: airline.label,
-                          //       enabled: airline.label != 'Grey',
-                          //       style: MenuItemButton.styleFrom(
-                          //         foregroundColor: airline.color,
-                          //       ),
-                          //     );
-                          //   }).toList(),
-                          // )
-                        ],
-                      ),
-                    ),
+
                     SizedBox(
                       width: 300,
                       child: TextField(
@@ -311,7 +277,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                           );
                         },
                         icon: const Icon(Icons.search),
-                        label: const Text('Search For Flight'),
+                        label: const Text('Validate Flight'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                         ),
@@ -356,21 +322,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                     ),
                     //number of flight plan that flight will be added to
                     Padding(padding: EdgeInsets.only(bottom: 20.0)),
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        //allows for the transfer of info from text field to other places
-                        controller: planNumController,
-                        //only numbers allowed in text field
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          labelText: 'Flight Plan Name',
-                        ),
-                      ),
-                    ),
+
                     Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,

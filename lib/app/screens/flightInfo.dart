@@ -1,3 +1,4 @@
+import 'package:chai/app/screens/areYouSureDelFlight.dart';
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +30,7 @@ class FlightInfo extends ConsumerStatefulWidget {
 
 int planId = 0;
 int planIndex = 0;
+int flightIndex = 0;
 
 class _FlightInfoState extends ConsumerState<FlightInfo> {
   _FlightInfoState();
@@ -116,10 +118,10 @@ class FlightPlanList extends ConsumerWidget {
           ),
           child: TextButton(
             onPressed: () {
-              context.go('/areYouSureDelFlight/$planId/$planIndex');
+              context.go('/areYouSureDelFlight/$planId/$flightIndex/$flightId');
             },
             child: Text(
-              'Permanently Delete This Flgiht From Plan',
+              'Permanently Delete This Flight From Plan',
               style: TextStyle(color: Colors.white), // Text color for contrast
             ),
           ),
@@ -150,6 +152,8 @@ class FlightPlanList extends ConsumerWidget {
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
+          //use this variable for delete button url
+          flightIndex = plan.indvFlightId;
           //makes cards clickable for deletion?
           return InkWell(
             onTap: () {},
@@ -159,7 +163,7 @@ class FlightPlanList extends ConsumerWidget {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
                 title: Text(
-                    "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: ${startDate}\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime"),
+                    "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: ${startDate}\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime\nDatabase ID: ${plan.indvFlightId}"),
                 subtitle: Text(''),
               ),
             ),
