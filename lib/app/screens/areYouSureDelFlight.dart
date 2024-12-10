@@ -21,15 +21,21 @@ final planNumController = TextEditingController();
 class AreYouSureDelFlight extends ConsumerStatefulWidget {
   final int? inputPlanId;
   final int? inputFlightIndex;
+  final int? inputFlightId;
 
   const AreYouSureDelFlight(
-      {Key? key, required this.inputPlanId, required this.inputFlightIndex})
+      {Key? key,
+      required this.inputPlanId,
+      required this.inputFlightIndex,
+      required this.inputFlightId})
       : super(key: key);
-
+  //IMPORTANT NOTE: SOMEHOW THE DEFINITIONS OF FLIGHT INDEX AND FLIGHT ID GOT SWAPPED
   //gets flight plan number for this page
-  get inputFlightId => inputPlanId;
+  get thisPlanId => inputPlanId;
   //get index of individual flight in flight plan
-  get inputPlanIndex => inputFlightIndex;
+  get thisFlightIndex => inputFlightIndex;
+  //get id of flight
+  get thisFlightId => inputFlightId;
 
   @override
   ConsumerState<AreYouSureDelFlight> createState() =>
@@ -37,10 +43,13 @@ class AreYouSureDelFlight extends ConsumerStatefulWidget {
 }
 
 int planId = 0;
-int planIndex = 0;
+int flightId = 0;
 
 class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
+  //IMPORTANT NOTE: SOMEHOW THE DEFINITIONS OF FLIGHT INDEX AND FLIGHT ID GOT SWAPPED
   int? get planId => widget.inputPlanId;
+  int? get flightIndex => widget.inputFlightIndex;
+  int? get flightId => widget.inputFlightId;
   @override
   Widget build(BuildContext context) {
     Future<Map<String, dynamic>?> deleteFlightPlan(int? flightNum) async {
@@ -51,7 +60,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
         final client = ref.read(httpClientProvider);
         //submit query
         final response =
-            await client.delete('/flight_plans/$planId/$planIndex');
+            await client.delete('/flight_plans/$planId/$flightIndex');
         final statusCode = response.statusCode;
         //flight found
         if (statusCode == 204) {
@@ -103,7 +112,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
                 final authController =
                     ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/flightInfo/${planId}/${planIndex}');
+                  context.go('/flightInfo/${planId}/${flightId}');
                 }
               },
               icon: const Icon(Icons.arrow_back),
@@ -127,7 +136,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
                         return SizedBox(
                           width: maxWidth,
                           child: Text(
-                            'Are you sure you want to permanently delete this flight plan?',
+                            'Are you sure you want to permanently delete this flight $flightIndex from plan $planId?',
                             style: TextStyle(
                               fontSize: 22.0,
                               fontWeight: FontWeight.bold,
@@ -150,7 +159,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
                               ref.read(authControllerProvider.notifier);
                           final flightData = await deleteFlightPlan(planId);
                           if (context.mounted) {
-                            context.go('/home');
+                            context.go('/addDeleteFlight/${planId}');
                           }
                         },
                         label: const Text('YES'),
@@ -170,7 +179,7 @@ class _AreYouSureDelFlightState extends ConsumerState<AreYouSureDelFlight> {
                           final authController =
                               ref.read(authControllerProvider.notifier);
                           if (context.mounted) {
-                            context.go('/addDeleteFlight/${planId}');
+                            context.go('/flightInfo/${planId}/${flightId}');
                           }
                         },
                         label: const Text('NO'),

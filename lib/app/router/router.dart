@@ -179,16 +179,21 @@ GoRouter router(RouterRef ref) {
         },
       ),
       GoRoute(
-        path: '/areYouSureDelFlight/:planId/:flightIndex',
+        path: '/areYouSureDelFlight/:planId/:flightIndex/:flightId',
         builder: (context, state) {
           final planIdString = state.pathParameters['planId'];
           final flightIndexString = state.pathParameters['flightIndex'];
+          final flightIdString = state.pathParameters['flightId'];
           final planId = int.tryParse(planIdString ?? '');
           final flightIndex = int.tryParse(flightIndexString ?? '');
+          final flightId = int.tryParse(flightIdString ?? '');
           return AreYouSureDelFlight(
-              inputPlanId: planId, inputFlightIndex: flightIndex);
+            inputPlanId: planId,
+            inputFlightIndex: flightIndex,
+            inputFlightId: flightId,
+          );
         },
-      ),
+      )
     ],
   );
 }

@@ -7,6 +7,7 @@ part 'flight_plan.g.dart';
 class FlightPlan with _$FlightPlan {
   factory FlightPlan({
     @JsonKey(name: 'flight_plan_id') required int id,
+    @JsonKey(name: 'indv_flight_id') required int indvFlightId,
     @JsonKey(name: 'flight_number') required String flightNumber,
     @JsonKey(name: 'dep_airport') required String departureAirportName,
     @JsonKey(name: 'iata') required String departureAirportCode,
