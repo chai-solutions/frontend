@@ -101,7 +101,6 @@ class FlightPlanList extends ConsumerWidget {
       return const Expanded(
         child: Center(
           child: Text('No flight plans have been made.'),
-          //checkPlans = checkPlans + 1;
         ),
       );
     }
@@ -121,14 +120,24 @@ class FlightPlanList extends ConsumerWidget {
               context.go('/addDeleteFlight/${plan.id}');
             },
             child: Card(
-              color: const Color.fromARGB(255, 86, 105, 114),
+              color: Colors.white, // Set the card background to white
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                side: const BorderSide(
+                  color: Colors.blue, // Blue outline
+                  width: 2.0, // Thickness of the border
+                ),
+              ),
               child: ListTile(
-                title:
-                    Text("Plan ID Number: ${plan.id}\nFirst Flight In Plan: "),
+                title: Text(
+                  "Plan ID Number: ${plan.id}\nFirst Flight In Plan: ",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 subtitle: Text(
-                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+                  '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime',
+                ),
                 trailing: const Icon(Icons.arrow_forward),
               ),
             ),
