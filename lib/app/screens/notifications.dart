@@ -1,3 +1,4 @@
+import 'package:chai/providers/http_client.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,25 +22,15 @@ class _NotificationsState extends ConsumerState<Notifications> {
   }
 
   Future<List<NotificationItem>> fetchNotifications() async {
-    try {
-      final response = await http.get(
-        Uri.parse('https://yourapi.com/usernotifications'),
-        headers: {
-          'Authorization':
-              'Bearer YOUR_ACCESS_TOKEN', // Replace with your token
-        },
-      );
+    final httpClient = ref.read(httpClientProvider);
+    final res = await httpClient.get('/notifications');
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => NotificationItem.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load notifications');
-      }
-    } catch (e) {
-      debugPrint('Error fetching notifications: $e');
-      throw Exception('Failed to load notifications');
+    if (res.statusCode != 200) {
+      throw Exception('Error: Could not fetch notifications');
     }
+
+    final List<dynamic> data = json.decode(res.body);
+    return data.map((json) => NotificationItem.fromJson(json)).toList();
   }
 
   @override
