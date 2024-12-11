@@ -10,75 +10,85 @@ class AddPlan extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 75.0,
-            ),
-            //button to go back home
-            child: ElevatedButton.icon(
-              onPressed: () async {
+          // White arrow button at the top-left corner
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
                 if (context.mounted) {
-                  context.go('/home');
+                  context.go('/home'); // Redirect to home page
                 }
               },
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Back Home'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the background color to white
-              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 75.0,
-            ),
-            //button to go back home
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                if (context.mounted) {
-                  context.go('/searchByAirport');
-                }
-              },
-              label: const Text('Search Flight By Airports'),
-              icon: const Icon(Icons.arrow_forward),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the background color to white
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 0.0,
-            ),
-            //button to go back home
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                if (context.mounted) {
-                  context.go('/searchByFlightNum');
-                }
-              },
-              label: const Text('Search Flight By Flight Number'),
-              icon: const Icon(Icons.arrow_forward),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the background color to white
-              ),
-            ),
-          ),
-          const Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 400.0),
-              child: Column(
-                children: [
-                  Padding(padding: EdgeInsets.all(0.0)),
-                ],
-              ),
+          // Main content of the screen
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    double maxWidth = constraints.maxWidth * 0.7;
+                    return SizedBox(
+                      width: maxWidth,
+                      child: const Text(
+                        'Search For Your First Flight',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center, // Center the text
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 50),
+                // Button for searching by airports
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    if (context.mounted) {
+                      context.go('/searchByAirport');
+                    }
+                  },
+                  label: const Text('Search Flight By Airports'),
+                  icon: const Icon(Icons.arrow_forward),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Default background color
+                    foregroundColor: Colors.blue, // Text and icon color
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(25), // Rounded corners
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 20.0), // Button padding
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Button for searching by flight number
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    if (context.mounted) {
+                      context.go('/searchByFlightNum');
+                    }
+                  },
+                  label: const Text('Search Flight By Flight Number'),
+                  icon: const Icon(Icons.arrow_forward),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Default background color
+                    foregroundColor: Colors.blue, // Text and icon color
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(25), // Rounded corners
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 20.0), // Button padding
+                  ),
+                ),
+              ],
             ),
           ),
         ],
