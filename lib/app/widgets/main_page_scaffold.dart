@@ -58,7 +58,9 @@ class MainPageScaffold extends StatelessWidget {
                                   Icons.notifications,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.push('/notifications');
+                                },
                               ),
                               const SizedBox(width: 4),
                               IconButton(
