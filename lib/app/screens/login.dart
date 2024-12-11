@@ -76,23 +76,23 @@ class LoginFormState extends State<LoginForm> {
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'email is required';
+                return 'Email is required';
               } else if (!value.contains('@')) {
-                return 'invalid email address';
+                return 'Invalid email address';
               }
               return null;
             },
-            placeholder: 'Username',
+            placeholder: 'Email',
           ),
           const SizedBox(height: 10),
           GSTextFormField(
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'password is required';
+                return 'Password is required';
               }
               if (value.length < 8) {
-                return 'must be >= 8 characters';
+                return 'Must be >= 8 characters';
               }
               return null;
             },
