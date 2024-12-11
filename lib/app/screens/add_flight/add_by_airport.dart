@@ -4,17 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:convert';
 
-class AddByFlightNum extends ConsumerStatefulWidget {
+class AddByAirport extends ConsumerStatefulWidget {
   final int? inputPlanId;
-  const AddByFlightNum({super.key, required this.inputPlanId});
-
+  const AddByAirport({super.key, required this.inputPlanId});
+  //gets flight plan number for this page
   get inputFlightId => inputPlanId;
 
   @override
-  AddByFlightNumState createState() => AddByFlightNumState();
+  AddByAirportState createState() => AddByAirportState();
 }
 
-class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
+class AddByAirportState extends ConsumerState<AddByAirport> {
   int planId = 0;
 
   String outputFlightNum = 'NA';
@@ -23,22 +23,33 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
   String outputDepAP = 'NA';
   String outputArrAP = 'NA';
 
-  final myController = TextEditingController();
+  final depController = TextEditingController();
+  final arrController = TextEditingController();
+  final dateController = TextEditingController();
+  final airlineController = TextEditingController();
   final planNumController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     planId = widget.inputPlanId!; //sets this screen's current flight plan
-    Future<Map<String, dynamic>?> searchNum(String flightNum) async {
+    Future<Map<String, dynamic>?> searchFlightAirport(
+        String depAir, String arrAir, String inputDate) async {
       try {
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
-        final response = await client.get('/flights/$flightNum');
+        final response = await client.get(
+            '/flights?departure_airport=$depAir&arrival_airport=$arrAir&sched_dep_time=$inputDate');
         final statusCode = response.statusCode;
         //flight found
         if (statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          final listData = jsonDecode(response.body) as List<dynamic>;
+
+          //REPLACE LATER!!! just gets information on first flight meeting parameters, must display flights as a list when we get more
+          final data = listData[0];
+          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          //final data = jsonDecode(response.body) as Map<String, dynamic>;
           setState(() {
             outputFlightNum = data['flight_number'].toString();
             outputArrTime = data['actual_arr_time'].toString();
@@ -59,15 +70,43 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
               context: context,
               builder: (context) => const AlertDialog(
                 title: Text('Error'),
-                content: Text('Invalid flight code.'),
+                content: Text('Invalid flight data.'),
               ),
             );
           });
         }
       } catch (error) {
-        // Invalid flight code
+        setState(() {
+          outputFlightNum = 'NA';
+          outputArrTime = 'NA';
+          outputDepTime = 'NA';
+          outputDepAP = 'NA';
+          outputArrAP = 'NA';
+          showDialog(
+            context: context,
+            builder: (context) => const AlertDialog(
+              title: Text('Error'),
+              content: Text('Invalid flight info.'),
+            ),
+          );
+        });
       }
       return null;
+    }
+
+    //date picker
+    Future<void> selectDate() async {
+      DateTime? userInputDate0 = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2150),
+      );
+      if (userInputDate0 != null) {
+        setState(() {
+          dateController.text = userInputDate0.toString().split(" ")[0];
+        });
+      }
     }
 
     Future<Map<String, dynamic>?> addToFlightPlan(
@@ -92,11 +131,12 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
             );
             //send user back to flight plan when finished adding flight to plan
             if (context.mounted) {
-              context.go('/addDeleteFlight/$planId');
+              context.push('/viewFlightPlan/$planId');
             }
           });
           return data;
         } else {
+          //flight not found
           setState(() {
             showDialog(
               context: context,
@@ -109,7 +149,7 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
           });
         }
       } catch (error) {
-        // Invalid flight code
+        // Invalid flight detected
       }
       return null;
     }
@@ -140,13 +180,11 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 150.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 20.0,
-                      ),
+                    SizedBox(
+                      width: 300,
                       child: Text(
                         'Add Flight to Plan $planId',
                         style: const TextStyle(
@@ -160,19 +198,55 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                       width: 300,
                       child: TextField(
                         //allows for the transfer of info from text field to other places
-                        controller: myController,
+                        controller: depController,
                         decoration: const InputDecoration(
-                          labelText: 'Flight Code',
+                          labelText: 'Departure Airport Code',
                         ),
                       ),
                     ),
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        //allows for the transfer of info from text field to other places
+                        controller: arrController,
+                        decoration: const InputDecoration(
+                          labelText: 'Arrival Airport Code',
+                        ),
+                      ),
+                    ),
+                    //Search Submit button
+                    const Padding(padding: EdgeInsets.all(5.0)),
+
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                          //allows for the transfer of info from text field to other places
+                          controller: dateController,
+                          decoration: const InputDecoration(
+                            labelText: 'Departure Date',
+                            filled: true,
+                            prefixIcon: Icon(Icons.calendar_today),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            selectDate();
+                          }),
+                    ),
+
+                    //Search Submit button
                     const Padding(padding: EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          String userInput = myController.text;
-                          await searchNum(userInput);
+                          String userInputDep = depController.text;
+                          String userInputArr = arrController.text;
+                          String userInputDate = dateController.text;
+                          await searchFlightAirport(
+                            userInputDep,
+                            userInputArr,
+                            userInputDate,
+                          );
                         },
                         icon: const Icon(Icons.search),
                         label: const Text('Validate Flight'),
@@ -218,13 +292,14 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
-
+                    //number of flight plan that flight will be added to
+                    const Padding(padding: EdgeInsets.only(bottom: 20.0)),
                     const Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          String userInput = myController.text;
+                          String userInput = outputFlightNum;
                           int userPlanNum = planId;
                           await addToFlightPlan(userInput, userPlanNum);
                         },
@@ -238,7 +313,7 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
                   ],
                 ),
               )),
-          const Padding(padding: EdgeInsets.only(bottom: 150.0)),
+          const Padding(padding: EdgeInsets.only(bottom: 100.0)),
         ],
       ),
     );
@@ -247,7 +322,10 @@ class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
   @override
   void dispose() {
     super.dispose();
-    myController.dispose();
+    depController.dispose();
+    arrController.dispose();
+    dateController.dispose();
+    airlineController.dispose();
     planNumController.dispose();
   }
 }

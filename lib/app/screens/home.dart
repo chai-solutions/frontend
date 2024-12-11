@@ -63,7 +63,7 @@ class FlightPlanList extends ConsumerWidget {
               ),
               GSButton(
                 onPressed: () {
-                  context.go('/areYouSure');
+                  context.go('/searchFirstHome');
                 },
                 text: 'Create New Plan',
               ),
@@ -118,7 +118,7 @@ class FlightPlanList extends ConsumerWidget {
 
           return InkWell(
             onTap: () {
-              context.go('/addDeleteFlight/${plan.id}');
+              context.push('/viewFlightPlan/${plan.id}');
             },
             child: Card(
               color: const Color.fromARGB(255, 86, 105, 114),
