@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class Notifications extends ConsumerStatefulWidget {
   const Notifications({super.key});
 
@@ -62,13 +64,21 @@ class _NotificationsState extends ConsumerState<Notifications> {
               itemCount: notificationsList.length,
               itemBuilder: (context, index) {
                 final notification = notificationsList[index];
+
+                final createdTime = DateFormat.MMMd('en_US')
+                    .add_jm()
+                    .format(notification.createdAt);
+
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
-                    title: Text(notification.title),
+                    title: Text(
+                      notification.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     subtitle: Text(notification.message),
                     trailing: Text(
-                      notification.timestamp,
+                      createdTime,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -83,24 +93,21 @@ class _NotificationsState extends ConsumerState<Notifications> {
 }
 
 class NotificationItem {
-  final String id;
   final String title;
   final String message;
-  final String timestamp;
+  final DateTime createdAt;
 
   NotificationItem({
-    required this.id,
     required this.title,
     required this.message,
-    required this.timestamp,
+    required this.createdAt,
   });
 
   factory NotificationItem.fromJson(Map<String, dynamic> json) {
     return NotificationItem(
-      id: json['id'],
       title: json['title'],
       message: json['message'],
-      timestamp: json['timestamp'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }
