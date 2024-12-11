@@ -1,7 +1,6 @@
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
 import 'package:go_router/go_router.dart';
-import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
@@ -16,8 +15,6 @@ class HomePage extends ConsumerStatefulWidget {
   @override
   ConsumerState<HomePage> createState() => HomePageState();
 }
-
-int checkPlans = 0;
 
 class HomePageState extends ConsumerState<HomePage> {
   HomePageState();
@@ -73,27 +70,10 @@ class FlightPlanList extends ConsumerWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // GSButton(
-              //   onPressed: () {
-              //     if (checkPlans != 0) {
-              //       context.go('/choosePlan');
-              //     } else {
-              //       ScaffoldMessenger.of(context).showSnackBar(
-              //         SnackBar(
-              //           content: Text('No Flight Plans To Edit!'),
-              //           backgroundColor: Colors.red,
-              //         ),
-              //       );
-              //     }
-              //   },
-              //   text: 'Edit Existing Plan',
-              // ),
-            ],
+            children: [],
           ),
         ),
         flightPlans.when(
@@ -131,11 +111,8 @@ class FlightPlanList extends ConsumerWidget {
       child: ListView.builder(
         itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
         itemBuilder: (context, index) {
-          //filters out duplicate flight id flights
           final uniqueId = uniquePlanIds.elementAt(index);
           final plan = plans.firstWhere((plan) => plan.id == uniqueId);
-          final startDate =
-              DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
@@ -148,10 +125,8 @@ class FlightPlanList extends ConsumerWidget {
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
-                title: Text("Plan ID Number: " +
-                    plan.id.toString() +
-                    "\n" +
-                    "First Flight In Plan: "),
+                title:
+                    Text("Plan ID Number: ${plan.id}\nFirst Flight In Plan: "),
                 subtitle: Text(
                     '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
                 trailing: const Icon(Icons.arrow_forward),

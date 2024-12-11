@@ -1,67 +1,38 @@
-import 'package:chai/app/widgets/buttons.dart';
-import 'package:chai/app/widgets/toasts.dart';
-import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/flight_plan/flight_plan.dart';
-import 'package:chai/repository/flight_plan.dart';
-import 'package:chai/repository/user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'dart:convert';
+
 import 'package:chai/providers/http_client.dart';
-import 'package:chai/utils/env.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'dart:convert';
-import 'dart:math';
-import 'package:path_provider/path_provider.dart'; // For finding the app's directory (if needed)
-
-String outputFlightNum = 'NA';
-String outputArrTime = 'NA';
-String outputDepTime = 'NA';
-String outputDepAP = 'NA';
-String outputArrAP = 'NA';
-
-final depController = TextEditingController();
-final arrController = TextEditingController();
-final dateController = TextEditingController();
-final airlineController = TextEditingController();
-final planNumController = TextEditingController();
-
-airlineSwitcher? selectedAirline;
-
-//stuff for airline dropdown menu
-enum airlineSwitcher {
-  Southwest('Southwest Airlines', Colors.blue),
-  Alaska('Alaska Airlines', Colors.blue),
-  American('American Airlines', Colors.red),
-  Spirit('Spirit Airlines', Colors.orange),
-  United('Untied Airlines', Color.fromARGB(255, 18, 55, 85));
-
-  const airlineSwitcher(this.label, this.color);
-  final String label;
-  final Color color;
-}
 
 List<String> fileNames = [];
 String? selectedFile;
 
 class SearchFirstByAirport extends ConsumerStatefulWidget {
   const SearchFirstByAirport({super.key});
+
   @override
-  _SearchByAirportState createState() => _SearchByAirportState();
+  SearchByAirportState createState() => SearchByAirportState();
 }
 
-class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
+class SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
+  String outputFlightNum = 'NA';
+  String outputArrTime = 'NA';
+  String outputDepTime = 'NA';
+  String outputDepAP = 'NA';
+  String outputArrAP = 'NA';
+
+  final depController = TextEditingController();
+  final arrController = TextEditingController();
+  final dateController = TextEditingController();
+  final airlineController = TextEditingController();
+  final planNumController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Future<Map<String, dynamic>?> searchFlightAirport(
         String depAir, String arrAir, String inputDate) async {
-      final baseURL = Env().baseURL;
       try {
-        print('search depature aiport: $depAir');
-        print('search arrival aiport: $arrAir');
-        print('search flight date: $inputDate');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
@@ -73,7 +44,6 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           final listData = jsonDecode(response.body) as List<dynamic>;
 
           //REPLACE LATER!!! just gets information on first flight meeting parameters, must display flights as a list when we get more
-          print('$listData');
           final data = listData[0];
           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,8 +57,6 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           });
           return data;
         } else {
-          //flight not found
-          print('Failed to fetch flight data. Status code: $statusCode');
           setState(() {
             outputFlightNum = 'NA';
             outputArrTime = 'NA';
@@ -97,7 +65,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
             outputArrAP = 'NA';
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text('Invalid flight code.'),
               ),
@@ -105,8 +73,6 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           });
         }
       } catch (error) {
-        print("Invalid Flight. Error: $error");
-        print('Failed to fetch flight data. Status code: $error');
         setState(() {
           outputFlightNum = 'NA';
           outputArrTime = 'NA';
@@ -115,34 +81,33 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           outputArrAP = 'NA';
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (context) => const AlertDialog(
               title: Text('Error'),
               content: Text('Invalid flight info.'),
             ),
           );
         });
       }
+      return null;
     }
 
     //date picker
-    Future<void> _selectDate() async {
-      DateTime? _userInputDate = await showDatePicker(
+    Future<void> selectDate() async {
+      DateTime? userInputDate0 = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2150),
       );
-      if (_userInputDate != null) {
+      if (userInputDate0 != null) {
         setState(() {
-          dateController.text = _userInputDate.toString().split(" ")[0];
+          dateController.text = userInputDate0.toString().split(" ")[0];
         });
       }
     }
 
     Future<Map<String, dynamic>?> creatingFlightPlan(String flightNum) async {
-      final baseURL = Env().baseURL;
       try {
-        print('searchFlightNum: $flightNum');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
@@ -155,7 +120,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Success!'),
                 content: Text('Created flight plan.'),
               ),
@@ -166,12 +131,10 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           });
           return data;
         } else {
-          //flight not found
-          print('Failed to add flight. Status code: $statusCode');
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text(
                     'Could not add flight to flight plan. \nInvalid flight info.'),
@@ -180,11 +143,11 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           });
         }
       } catch (error) {
-        print("Invalid Flight Code");
+        // Invalid flight code
       }
+      return null;
     }
 
-    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,8 +159,6 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchFirstHome');
                 }
@@ -213,7 +174,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Column(
                   children: [
                     //USER INPUT FIELD HERE
@@ -222,7 +183,7 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                       child: TextField(
                         //allows for the transfer of info from text field to other places
                         controller: depController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Departure Airport Code',
                         ),
                       ),
@@ -232,45 +193,40 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                       child: TextField(
                         //allows for the transfer of info from text field to other places
                         controller: arrController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Arrival Airport Code',
                         ),
                       ),
                     ),
                     //Search Submit button
-                    Padding(padding: const EdgeInsets.all(5.0)),
+                    const Padding(padding: EdgeInsets.all(5.0)),
 
                     SizedBox(
                       width: 300,
                       child: TextField(
                           //allows for the transfer of info from text field to other places
                           controller: dateController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Departure Date',
                             filled: true,
                             prefixIcon: Icon(Icons.calendar_today),
                           ),
                           readOnly: true,
                           onTap: () {
-                            _selectDate();
+                            selectDate();
                           }),
                     ),
 
                     //Search Submit button
-                    Padding(padding: const EdgeInsets.all(5.0)),
+                    const Padding(padding: EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInputDep = depController.text;
                           String userInputArr = arrController.text;
                           String userInputDate = dateController.text;
-                          print(
-                              'USER INPUT:\nDepature Airport: $userInputDep\nArrival Airport: $userInputArr');
-                          final flightData = await searchFlightAirport(
+                          await searchFlightAirport(
                             userInputDep,
                             userInputArr,
                             userInputDate,
@@ -321,21 +277,15 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                       ),
                     ),
                     //number of flight plan that flight will be added to
-                    Padding(padding: EdgeInsets.only(bottom: 20.0)),
+                    const Padding(padding: EdgeInsets.only(bottom: 20.0)),
 
-                    Padding(padding: EdgeInsets.only(bottom: 10.0)),
+                    const Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInput = outputFlightNum;
-                          //convert flight plan number input into int
-                          print('Adding Flight: $userInput');
-                          final flightData =
-                              await creatingFlightPlan(userInput);
+                          await creatingFlightPlan(userInput);
                         },
                         label: const Text('Create Flight Plan'),
                         icon: const Icon(Icons.arrow_forward),
@@ -347,9 +297,19 @@ class _SearchByAirportState extends ConsumerState<SearchFirstByAirport> {
                   ],
                 ),
               )),
-          Padding(padding: EdgeInsets.only(bottom: 100.0)),
+          const Padding(padding: EdgeInsets.only(bottom: 100.0)),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    depController.dispose();
+    arrController.dispose();
+    dateController.dispose();
+    airlineController.dispose();
+    planNumController.dispose();
   }
 }

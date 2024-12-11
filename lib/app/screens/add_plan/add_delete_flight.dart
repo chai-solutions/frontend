@@ -1,8 +1,6 @@
-import 'package:chai/app/screens/areYouSureDelFlight.dart';
 import 'package:chai/app/widgets/buttons.dart';
 import 'package:chai/app/widgets/main_page_scaffold.dart';
 import 'package:go_router/go_router.dart';
-import 'package:chai/controllers/auth.dart';
 import 'package:chai/models/flight_plan/flight_plan.dart';
 import 'package:chai/providers/onesignal.dart';
 import 'package:chai/repository/flight_plan.dart';
@@ -11,29 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class FlightInfo extends ConsumerStatefulWidget {
+class AddDeleteFlight extends ConsumerStatefulWidget {
   final int? inputPlanId;
-  final int? inputFlightIndex;
-
-  const FlightInfo(
-      {Key? key, required this.inputPlanId, required this.inputFlightIndex})
-      : super(key: key);
-
+  const AddDeleteFlight({super.key, required this.inputPlanId});
   //gets flight plan number for this page
   get inputFlightId => inputPlanId;
-  //get index of individual flight in flight plan
-  get inputPlanIndex => inputFlightIndex;
 
   @override
-  ConsumerState<FlightInfo> createState() => _FlightInfoState();
+  ConsumerState<AddDeleteFlight> createState() => AddDeleteFlightState();
 }
 
 int planId = 0;
-int planIndex = 0;
-int flightIndex = 0;
 
-class _FlightInfoState extends ConsumerState<FlightInfo> {
-  _FlightInfoState();
+class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
+  AddDeleteFlightState();
   @override
   void initState() {
     super.initState();
@@ -48,10 +37,9 @@ class _FlightInfoState extends ConsumerState<FlightInfo> {
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
     planId = widget.inputFlightId;
-    planIndex = widget.inputFlightIndex! + 1;
+
     return MainPageScaffold(
-      title:
-          name != null ? 'Flight Plan ${planId}\nFlight #${planIndex}' : null,
+      title: name != null ? 'Flight Plan ${widget.inputFlightId}' : null,
       child: const FlightPlanList(),
     );
   }
@@ -78,19 +66,23 @@ class FlightPlanList extends ConsumerWidget {
                 //button to go back home
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    final authController =
-                        ref.read(authControllerProvider.notifier);
                     if (context.mounted) {
-                      context.go('/addDeleteFlight/${planId}');
+                      context.go('/home');
                     }
                   },
                   icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back To Plan'),
+                  label: const Text('Back Home'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         Colors.white, // Set the background color to white
                   ),
                 ),
+              ),
+              GSButton(
+                onPressed: () {
+                  context.go('/editPlanHome/$planId');
+                },
+                text: 'Add Flight',
               ),
             ],
           ),
@@ -118,10 +110,10 @@ class FlightPlanList extends ConsumerWidget {
           ),
           child: TextButton(
             onPressed: () {
-              context.go('/areYouSureDelFlight/$planId/$flightIndex/$flightId');
+              context.go('/areYouSureDelPlan/$planId');
             },
-            child: Text(
-              'Permanently Delete This Flight From Plan',
+            child: const Text(
+              'Permanently Delete Plan',
               style: TextStyle(color: Colors.white), // Text color for contrast
             ),
           ),
@@ -141,30 +133,32 @@ class FlightPlanList extends ConsumerWidget {
 
     return Expanded(
       child: ListView.builder(
-        //single out specific desired flight
-        itemCount: 1,
+        //filters out flights from other plans
+        itemCount: plans.where((plan) => plan.id == planId).length,
         itemBuilder: (context, index) {
           final filteredPlans =
-              plans.where((plan) => plan.id == planId).toList()[planIndex - 1];
-          final plan = filteredPlans;
+              plans.where((plan) => plan.id == planId).toList();
+          final plan = filteredPlans[index];
           final startDate =
               DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
-          //use this variable for delete button url
-          flightIndex = plan.indvFlightId;
-          //makes cards clickable for deletion?
+          //makes cards clickable for moe info
           return InkWell(
-            onTap: () {},
+            onTap: () {
+              //context.go('/flightInfo');
+              context.go('/flightInfo/${plan.id}/$index');
+            },
             child: Card(
               color: const Color.fromARGB(255, 86, 105, 114),
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
-                title: Text(
-                    "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: ${startDate}\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime\nDatabase ID: ${plan.indvFlightId}"),
-                subtitle: Text(''),
+                title: Text("${plan.flightNumber}\n$startDate"),
+                subtitle: Text(
+                    '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
+                trailing: const Icon(Icons.info),
               ),
             ),
           );

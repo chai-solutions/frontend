@@ -6,17 +6,17 @@ class AddTripPage extends StatefulWidget {
   const AddTripPage({super.key});
 
   @override
-  _AddTripPageState createState() => _AddTripPageState();
+  AddTripPageState createState() => AddTripPageState();
 }
 
-class _AddTripPageState extends State<AddTripPage> {
+class AddTripPageState extends State<AddTripPage> {
   final _departureController = TextEditingController();
   final _arrivalController = TextEditingController();
   final _airlineController = TextEditingController();
   final _flightNumberController = TextEditingController();
   DateTime? _selectedDate;
 
-  List<Map<String, TextEditingController>> _additionalFlights = [];
+  final List<Map<String, TextEditingController>> _additionalFlights = [];
 
   @override
   void dispose() {

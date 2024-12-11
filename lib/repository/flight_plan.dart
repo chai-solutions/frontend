@@ -18,16 +18,6 @@ class FlightPlanRepository {
       throw Exception('Internal server error. Try again later.');
     }
 
-    // Right now, the body is empty instead of returning 404
-    // for nonexistent IDs.
-    if (res.body.isEmpty) {
-      throw Exception('Flight plan not found');
-    }
-
-    if (res.body == "null\n") {
-      return [];
-    }
-
     final json = jsonDecode(res.body) as List<dynamic>;
     return FlightPlanList.fromJson({'flightPlanList': json}).flightPlanList;
   }

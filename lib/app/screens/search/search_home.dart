@@ -1,13 +1,6 @@
-import 'package:chai/app/widgets/buttons.dart';
-import 'package:chai/app/widgets/toasts.dart';
-import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/flight_plan/flight_plan.dart';
-import 'package:chai/repository/flight_plan.dart';
-import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 final myController = TextEditingController();
 
@@ -15,7 +8,6 @@ class SearchHomeScreen extends ConsumerWidget {
   const SearchHomeScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,8 +19,6 @@ class SearchHomeScreen extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/home');
                 }
@@ -46,7 +36,7 @@ class SearchHomeScreen extends ConsumerWidget {
               double maxWidth = constraints.maxWidth * 0.7;
               return SizedBox(
                 width: maxWidth,
-                child: Text(
+                child: const Text(
                   'Search For A Flight',
                   style: TextStyle(
                     fontSize: 22.0,
@@ -64,8 +54,6 @@ class SearchHomeScreen extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchByAirport');
                 }
@@ -85,8 +73,6 @@ class SearchHomeScreen extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchByFlightNum');
                 }
@@ -99,13 +85,13 @@ class SearchHomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          Align(
+          const Align(
               alignment: Alignment.center,
               child: Padding(
                 padding: EdgeInsets.only(bottom: 400.0),
                 child: Column(
                   children: [
-                    Padding(padding: const EdgeInsets.all(0.0)),
+                    Padding(padding: EdgeInsets.all(0.0)),
                   ],
                 ),
               )),

@@ -1,22 +1,16 @@
-import 'package:chai/app/widgets/buttons.dart';
-import 'package:chai/app/widgets/toasts.dart';
-import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/flight_plan/flight_plan.dart';
-import 'package:chai/repository/flight_plan.dart';
-import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-
-final myController = TextEditingController();
 
 class DeletePlan extends ConsumerWidget {
   final int? inputPlanId;
-  const DeletePlan({Key? key, required this.inputPlanId}) : super(key: key);
+
+  DeletePlan({super.key, required this.inputPlanId});
+
+  final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,8 +22,6 @@ class DeletePlan extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/addDeleteFlight/$inputPlanId');
                 }
@@ -48,7 +40,7 @@ class DeletePlan extends ConsumerWidget {
             ),
             child: Text(
               'Add Flight to Plan $inputPlanId',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -61,8 +53,6 @@ class DeletePlan extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchByAirport');
                 }
@@ -82,8 +72,6 @@ class DeletePlan extends ConsumerWidget {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchByFlightNum');
                 }
@@ -96,16 +84,17 @@ class DeletePlan extends ConsumerWidget {
               ),
             ),
           ),
-          Align(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 400.0),
-                child: Column(
-                  children: [
-                    Padding(padding: const EdgeInsets.all(0.0)),
-                  ],
-                ),
-              )),
+          const Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 400.0),
+              child: Column(
+                children: [
+                  Padding(padding: EdgeInsets.all(0.0)),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

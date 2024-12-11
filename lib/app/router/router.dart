@@ -7,22 +7,22 @@ import 'package:chai/app/screens/settings.dart';
 import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:chai/app/screens/searchHome.dart';
-import 'package:chai/app/screens/searchByFlightNum.dart';
-import 'package:chai/app/screens/searchByAirport.dart';
-import 'package:chai/app/screens/addPlan.dart';
-import 'package:chai/app/screens/addDeleteFlight.dart';
-import 'package:chai/app/screens/editPlanHome.dart';
-import 'package:chai/app/screens/areYouSure.dart';
-import 'package:chai/app/screens/searchFirstHome.dart';
-import 'package:chai/app/screens/searchFirstByFlightNum.dart';
-import 'package:chai/app/screens/searchFirstByAirport.dart';
-import 'package:chai/app/screens/deletePlan.dart';
-import 'package:chai/app/screens/addByAirport.dart';
-import 'package:chai/app/screens/addByFlightNum.dart';
-import 'package:chai/app/screens/areYouSureDelPlan.dart';
-import 'package:chai/app/screens/flightInfo.dart';
-import 'package:chai/app/screens/areYouSureDelFlight.dart';
+import 'package:chai/app/screens/search/search_home.dart';
+import 'package:chai/app/screens/search/search_by_flight_num.dart';
+import 'package:chai/app/screens/search/search_by_airport.dart';
+import 'package:chai/app/screens/add_plan/add_plan.dart';
+import 'package:chai/app/screens/add_plan/add_delete_flight.dart';
+import 'package:chai/app/screens/edit_plan_home.dart';
+import 'package:chai/app/screens/are_you_sure.dart';
+import 'package:chai/app/screens/search/search_first_home.dart';
+import 'package:chai/app/screens/search/search_first_by_flight_num.dart';
+import 'package:chai/app/screens/search/search_first_by_airport.dart';
+import 'package:chai/app/screens/delete_plan.dart';
+import 'package:chai/app/screens/add_plan/add_by_airport.dart';
+import 'package:chai/app/screens/add_plan/add_by_flight_name.dart';
+import 'package:chai/app/screens/are_you_sure_del_plan.dart';
+import 'package:chai/app/screens/flight_info.dart';
+import 'package:chai/app/screens/are_you_sure_del_flight.dart';
 
 part 'router.g.dart';
 
@@ -51,7 +51,7 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) {
-          return HomePage();
+          return const HomePage();
         },
       ),
       GoRoute(
@@ -93,7 +93,7 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: '/addPlan',
         builder: (context, state) {
-          return const AddPlan();
+          return AddPlan();
         },
       ),
       GoRoute(
@@ -123,7 +123,7 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: '/areYouSure',
         builder: (context, state) {
-          return const AreYouSure();
+          return AreYouSure();
         },
       ),
       GoRoute(

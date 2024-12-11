@@ -1,42 +1,36 @@
-import 'package:chai/app/widgets/buttons.dart';
-import 'package:chai/app/widgets/toasts.dart';
-import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/flight_plan/flight_plan.dart';
-import 'package:chai/repository/flight_plan.dart';
-import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:chai/providers/http_client.dart';
-import 'package:chai/utils/env.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'dart:math';
 
-String outputFlightNum = 'NA';
-String outputArrTime = 'NA';
-String outputDepTime = 'NA';
-String outputDepAP = 'NA';
-String outputArrAP = 'NA';
+class AddByFlightNum extends ConsumerStatefulWidget {
+  final int? inputPlanId;
+  const AddByFlightNum({super.key, required this.inputPlanId});
 
-final myController = TextEditingController();
-final planNumController = TextEditingController();
+  get inputFlightId => inputPlanId;
 
-class SearchFirstByFlightNum extends ConsumerStatefulWidget {
-  const SearchFirstByFlightNum({super.key});
   @override
-  _SearchByFlightNumState createState() => _SearchByFlightNumState();
+  AddByFlightNumState createState() => AddByFlightNumState();
 }
 
-class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
+class AddByFlightNumState extends ConsumerState<AddByFlightNum> {
+  int planId = 0;
+
+  String outputFlightNum = 'NA';
+  String outputArrTime = 'NA';
+  String outputDepTime = 'NA';
+  String outputDepAP = 'NA';
+  String outputArrAP = 'NA';
+
+  final myController = TextEditingController();
+  final planNumController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    planId = widget.inputPlanId!; //sets this screen's current flight plan
     Future<Map<String, dynamic>?> searchNum(String flightNum) async {
-      final baseURL = Env().baseURL;
       try {
-        print('searchFlightNum: $flightNum');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
@@ -55,7 +49,6 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
           return data;
         } else {
           //flight not found
-          print('Failed to fetch flight data. Status code: $statusCode');
           setState(() {
             outputFlightNum = 'NA';
             outputArrTime = 'NA';
@@ -64,7 +57,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
             outputArrAP = 'NA';
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text('Invalid flight code.'),
               ),
@@ -72,43 +65,42 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
           });
         }
       } catch (error) {
-        print("Invalid Flight Code");
+        // Invalid flight code
       }
+      return null;
     }
 
-    Future<Map<String, dynamic>?> creatingFlightPlan(String flightNum) async {
-      final baseURL = Env().baseURL;
+    Future<Map<String, dynamic>?> addToFlightPlan(
+        String flightNum, int planNum) async {
       try {
-        print('searchFlightNum: $flightNum');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
         final response = await client
-            .post('/flight_plans', body: {"flightNumber": flightNum});
+            .post('/flight_plans/$planNum', body: {"flightNumber": flightNum});
         final statusCode = response.statusCode;
         //flight found
-        if (statusCode == 201) {
+        if (statusCode == 200) {
           final data = jsonDecode(response.body) as Map<String, dynamic>;
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Success!'),
-                content: Text('Created flight plan.'),
+                content: Text('Flight added to plan.'),
               ),
             );
+            //send user back to flight plan when finished adding flight to plan
             if (context.mounted) {
-              context.go('/Home');
+              context.go('/addDeleteFlight/$planId');
             }
           });
           return data;
         } else {
-          //flight not found
-          print('Failed to add flight. Status code: $statusCode');
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text(
                     'Could not add flight to flight plan. \nInvalid flight code.'),
@@ -117,11 +109,11 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
           });
         }
       } catch (error) {
-        print("Invalid Flight Code");
+        // Invalid flight code
       }
+      return null;
     }
 
-    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,10 +125,8 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
-                  context.go('/searchFirstHome');
+                  context.go('/editPlanHome/$planId');
                 }
               },
               icon: const Icon(Icons.arrow_back),
@@ -150,31 +140,39 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(bottom: 150.0),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20.0,
+                      ),
+                      child: Text(
+                        'Add Flight to Plan $planId',
+                        style: const TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     //USER INPUT FIELD HERE
                     SizedBox(
                       width: 300,
                       child: TextField(
                         //allows for the transfer of info from text field to other places
                         controller: myController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Flight Code',
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.all(5.0)),
+                    const Padding(padding: EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInput = myController.text;
-                          print('USER INPUT: $userInput');
-                          final flightData = await searchNum(userInput);
+                          await searchNum(userInput);
                         },
                         icon: const Icon(Icons.search),
                         label: const Text('Validate Flight'),
@@ -220,25 +218,17 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
-                    //number of flight plan that flight will be added to
-                    Padding(padding: EdgeInsets.only(bottom: 20.0)),
 
-                    Padding(padding: EdgeInsets.only(bottom: 10.0)),
+                    const Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInput = myController.text;
-                          //convert flight plan number input into int
-                          //int userPlanNum = int.parse(planNumController.text);
-                          print('Adding Flight: $userInput');
-                          final flightData =
-                              await creatingFlightPlan(userInput);
+                          int userPlanNum = planId;
+                          await addToFlightPlan(userInput, userPlanNum);
                         },
-                        label: const Text('Create Flight Plan'),
+                        label: const Text('Add Flight'),
                         icon: const Icon(Icons.arrow_forward),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -248,9 +238,16 @@ class _SearchByFlightNumState extends ConsumerState<SearchFirstByFlightNum> {
                   ],
                 ),
               )),
-          Padding(padding: EdgeInsets.only(bottom: 150.0)),
+          const Padding(padding: EdgeInsets.only(bottom: 150.0)),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    myController.dispose();
+    planNumController.dispose();
   }
 }

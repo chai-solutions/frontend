@@ -1,42 +1,31 @@
-import 'package:chai/app/widgets/buttons.dart';
-import 'package:chai/app/widgets/toasts.dart';
-import 'package:chai/controllers/auth.dart';
-import 'package:chai/models/flight_plan/flight_plan.dart';
-import 'package:chai/repository/flight_plan.dart';
-import 'package:chai/repository/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:chai/providers/http_client.dart';
-import 'package:chai/utils/env.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'dart:math';
-
-String outputFlightNum = 'NA';
-String outputArrTime = 'NA';
-String outputDepTime = 'NA';
-String outputDepAP = 'NA';
-String outputArrAP = 'NA';
-
-final myController = TextEditingController();
-final planNumController = TextEditingController();
 
 class SearchByFlightNum extends ConsumerStatefulWidget {
   const SearchByFlightNum({super.key});
+
   @override
-  _SearchByFlightNumState createState() => _SearchByFlightNumState();
+  SearchByFlightNumState createState() => SearchByFlightNumState();
 }
 
-class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
+class SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
+  String outputFlightNum = '';
+  String outputArrTime = '';
+  String outputDepTime = '';
+  String outputDepAP = '';
+  String outputArrAP = '';
+
+  final myController = TextEditingController();
+  final planNumController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Future<Map<String, dynamic>?> searchNum(String flightNum) async {
-      final baseURL = Env().baseURL;
       try {
-        print('searchFlightNum: $flightNum');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
@@ -55,7 +44,6 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           return data;
         } else {
           //flight not found
-          print('Failed to fetch flight data. Status code: $statusCode');
           setState(() {
             outputFlightNum = 'NA';
             outputArrTime = 'NA';
@@ -64,7 +52,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
             outputArrAP = 'NA';
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text('Invalid flight code.'),
               ),
@@ -72,15 +60,14 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           });
         }
       } catch (error) {
-        print("Invalid Flight Code");
+        // Invalid flight code
       }
+      return null;
     }
 
     Future<Map<String, dynamic>?> addToFlightPlan(
         String flightNum, int planNum) async {
-      final baseURL = Env().baseURL;
       try {
-        print('searchFlightNum: $flightNum');
         //authorize query
         final client = ref.read(httpClientProvider);
         //submit query
@@ -93,7 +80,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Success!'),
                 content: Text('Flight added to plan.'),
               ),
@@ -104,12 +91,10 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           });
           return data;
         } else {
-          //flight not found
-          print('Failed to add flight. Status code: $statusCode');
           setState(() {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
+              builder: (context) => const AlertDialog(
                 title: Text('Error'),
                 content: Text(
                     'Could not add flight to flight plan. \nInvalid flight code.'),
@@ -118,11 +103,11 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           });
         }
       } catch (error) {
-        print("Invalid Flight Code");
+        // Invalid flight code
       }
+      return null;
     }
 
-    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,8 +119,6 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
             //button to go back home
             child: ElevatedButton.icon(
               onPressed: () async {
-                final authController =
-                    ref.read(authControllerProvider.notifier);
                 if (context.mounted) {
                   context.go('/searchHome');
                 }
@@ -151,7 +134,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
           Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Column(
                   children: [
                     //USER INPUT FIELD HERE
@@ -160,22 +143,18 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                       child: TextField(
                         //allows for the transfer of info from text field to other places
                         controller: myController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Flight Code',
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.all(5.0)),
+                    const Padding(padding: EdgeInsets.all(5.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInput = myController.text;
-                          print('USER INPUT: $userInput');
-                          final flightData = await searchNum(userInput);
+                          await searchNum(userInput);
                         },
                         icon: const Icon(Icons.search),
                         label: const Text('Validate Flight'),
@@ -222,7 +201,7 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                       ),
                     ),
                     //number of flight plan that flight will be added to
-                    Padding(padding: EdgeInsets.only(bottom: 20.0)),
+                    const Padding(padding: EdgeInsets.only(bottom: 20.0)),
                     SizedBox(
                       width: 300,
                       child: TextField(
@@ -233,36 +212,29 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Flight Plan ID',
                         ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(bottom: 10.0)),
+                    const Padding(padding: EdgeInsets.only(bottom: 10.0)),
                     SizedBox(
                       width: 300,
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final authController =
-                              ref.read(authControllerProvider.notifier);
-                          //context.go('/home');
                           String userInput = myController.text;
-                          print("test: " + planNumController.text);
                           if (planNumController.text.isEmpty) {
                             // Show error message (replace with your preferred method)
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text('Please enter a flight plan ID'),
                                 backgroundColor: Colors.red,
                               ),
                             );
                             return; // Exit the function if there's no input
                           } else {
-                            //convert flight plan number input into int
                             int userPlanNum = int.parse(planNumController.text);
-                            print('Adding Flight: $userInput');
-                            final flightData =
-                                await addToFlightPlan(userInput, userPlanNum);
+                            await addToFlightPlan(userInput, userPlanNum);
                           }
                         },
                         label: const Text('Add Flight'),
@@ -275,9 +247,15 @@ class _SearchByFlightNumState extends ConsumerState<SearchByFlightNum> {
                   ],
                 ),
               )),
-          Padding(padding: EdgeInsets.only(bottom: 150.0)),
+          const Padding(padding: EdgeInsets.only(bottom: 150.0)),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
