@@ -76,7 +76,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             controller: _nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'name is required';
+                return 'Name is required';
               }
               return null;
             },
@@ -87,9 +87,9 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'email is required';
+                return 'Email is required';
               } else if (!value.contains('@')) {
-                return 'invalid email address';
+                return 'Invalid email address';
               }
               return null;
             },
@@ -100,14 +100,14 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'password is required';
+                return 'Password is required';
               }
               if (value.length < 8) {
-                return 'must be >= 8 characters';
+                return 'Must be >= 8 characters';
               }
               return null;
             },
-            placeholder: 'Passwordl',
+            placeholder: 'Password',
             concealed: true,
           ),
           const SizedBox(height: 10),
@@ -115,13 +115,13 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             controller: _confirmPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'password confirmation is required';
+                return 'Password confirmation is required';
               }
               if (value.length < 8) {
-                return 'must be >= 8 characters';
+                return 'Must be >= 8 characters';
               }
               if (value != _passwordController.value.text) {
-                return 'passwords do not match';
+                return 'Passwords do not match';
               }
               return null;
             },
