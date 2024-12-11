@@ -3,6 +3,7 @@ import 'package:chai/app/screens/about.dart';
 import 'package:chai/app/screens/create_account.dart';
 import 'package:chai/app/screens/home.dart';
 import 'package:chai/app/screens/login.dart';
+import 'package:chai/app/screens/notifications.dart';
 import 'package:chai/app/screens/settings.dart';
 import 'package:chai/app/screens/splash.dart';
 import 'package:go_router/go_router.dart';
@@ -64,6 +65,12 @@ GoRouter router(RouterRef ref) {
         path: '/settings',
         builder: (context, state) {
           return const Settings();
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) {
+          return const Notifications();
         },
       ),
       GoRoute(

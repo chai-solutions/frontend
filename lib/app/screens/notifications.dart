@@ -4,14 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class NotificationsPage extends ConsumerStatefulWidget {
-  const NotificationsPage({super.key});
+class Notifications extends ConsumerStatefulWidget {
+  const Notifications({super.key});
 
   @override
-  ConsumerState<NotificationsPage> createState() => _NotificationsPageState();
+  ConsumerState<Notifications> createState() => _NotificationsState();
 }
 
-class _NotificationsPageState extends ConsumerState<NotificationsPage> {
+class _NotificationsState extends ConsumerState<Notifications> {
   late Future<List<NotificationItem>> notifications;
 
   @override
