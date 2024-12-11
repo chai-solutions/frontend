@@ -9,21 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+class AddDeleteFlight extends ConsumerStatefulWidget {
+  final int? inputPlanId;
+  const AddDeleteFlight({super.key, required this.inputPlanId});
+  //gets flight plan number for this page
+  get inputFlightId => inputPlanId;
 
   @override
-  ConsumerState<HomePage> createState() => HomePageState();
+  ConsumerState<AddDeleteFlight> createState() => AddDeleteFlightState();
 }
 
-class HomePageState extends ConsumerState<HomePage> {
-  HomePageState();
+int planId = 0;
 
+class AddDeleteFlightState extends ConsumerState<AddDeleteFlight> {
+  AddDeleteFlightState();
   @override
   void initState() {
     super.initState();
     final oneSignalService = ref.read(oneSignalServiceProvider);
     oneSignalService.requestPermission();
+    planId = widget.inputPlanId!; //sets this screen's current flight plan
   }
 
   @override
@@ -31,9 +36,10 @@ class HomePageState extends ConsumerState<HomePage> {
     final user = ref.watch(currentUserProvider);
     final fullName = user.whenOrNull(data: (u) => u.name);
     final name = fullName?.split(' ').elementAt(0);
+    planId = widget.inputFlightId;
 
     return MainPageScaffold(
-      title: name != null ? 'Welcome, $name!' : null,
+      title: name != null ? 'Flight Plan ${widget.inputFlightId}' : null,
       child: const FlightPlanList(),
     );
   }
@@ -45,7 +51,6 @@ class FlightPlanList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flightPlans = ref.watch(flightPlanListProvider);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -54,26 +59,32 @@ class FlightPlanList extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'My Trips',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0.0,
+                ),
+                //button to go back home
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    if (context.mounted) {
+                      context.go('/home');
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Back Home'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.white, // Set the background color to white
+                  ),
                 ),
               ),
               GSButton(
                 onPressed: () {
-                  context.go('/areYouSure');
+                  context.go('/editPlanHome/$planId');
                 },
-                text: 'Create New Plan',
+                text: 'Add Flight',
               ),
             ],
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-          child: Row(
-            children: [],
           ),
         ),
         flightPlans.when(
@@ -92,6 +103,21 @@ class FlightPlanList extends ConsumerWidget {
             ),
           ),
         ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(8.0), // Adjust radius as needed
+          ),
+          child: TextButton(
+            onPressed: () {
+              context.go('/areYouSureDelPlan/$planId');
+            },
+            child: const Text(
+              'Permanently Delete Plan',
+              style: TextStyle(color: Colors.white), // Text color for contrast
+            ),
+          ),
+        )
       ],
     );
   }
@@ -101,35 +127,38 @@ class FlightPlanList extends ConsumerWidget {
       return const Expanded(
         child: Center(
           child: Text('No flight plans have been made.'),
-          //checkPlans = checkPlans + 1;
         ),
       );
     }
-    // Create a Set to store unique plan IDs
-    Set<int> uniquePlanIds = {};
+
     return Expanded(
       child: ListView.builder(
-        itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
+        //filters out flights from other plans
+        itemCount: plans.where((plan) => plan.id == planId).length,
         itemBuilder: (context, index) {
-          final uniqueId = uniquePlanIds.elementAt(index);
-          final plan = plans.firstWhere((plan) => plan.id == uniqueId);
+          final filteredPlans =
+              plans.where((plan) => plan.id == planId).toList();
+          final plan = filteredPlans[index];
+          final startDate =
+              DateFormat.yMMMMd('en_US').format(plan.scheduledDepartureTime);
           final departureTime =
               DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
+          //makes cards clickable for moe info
           return InkWell(
             onTap: () {
-              context.go('/addDeleteFlight/${plan.id}');
+              //context.go('/flightInfo');
+              context.go('/flightInfo/${plan.id}/$index');
             },
             child: Card(
               color: const Color.fromARGB(255, 86, 105, 114),
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ListTile(
-                title:
-                    Text("Plan ID Number: ${plan.id}\nFirst Flight In Plan: "),
+                title: Text("${plan.flightNumber}\n$startDate"),
                 subtitle: Text(
                     '${plan.departureAirportCode} -> ${plan.arrivalAirportCode} @ $departureTime'),
-                trailing: const Icon(Icons.arrow_forward),
+                trailing: const Icon(Icons.info),
               ),
             ),
           );
