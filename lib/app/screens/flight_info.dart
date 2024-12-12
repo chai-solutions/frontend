@@ -98,46 +98,31 @@ class FlightStepInfo extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 15),
+        _planCard(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 0.0,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Adjust radius as needed
                 ),
-                //button to go back home
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    if (context.mounted) {
-                      context.pop();
-                    }
+                child: TextButton(
+                  onPressed: () {
+                    _confirmDelete(context, ref);
                   },
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back To Plan'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                  child: const Text(
+                    'Permanently Delete Plan',
+                    style: TextStyle(
+                        color: Colors.white), // Text color for contrast
                   ),
                 ),
               ),
             ],
-          ),
-        ),
-        _planCard(),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(8.0), // Adjust radius as needed
-          ),
-          child: TextButton(
-            onPressed: () {
-              _confirmDelete(context, ref);
-            },
-            child: const Text(
-              'Permanently Delete This Flight From Plan',
-              style: TextStyle(color: Colors.white),
-            ),
           ),
         ),
       ],
@@ -206,15 +191,13 @@ class FlightStepInfo extends ConsumerWidget {
     final departureTime =
         DateFormat.Hm('en_US').format(plan.scheduledDepartureTime);
 
-    return Expanded(
-      child: Card(
-        color: const Color.fromARGB(255, 86, 105, 114),
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: ListTile(
-          title: Text(
-              "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: $startDate\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime"),
-          subtitle: const Text(''),
-        ),
+    return Card(
+      color: const Color.fromARGB(255, 86, 105, 114),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: ListTile(
+        title: Text(
+            "Flight Number: ${plan.flightNumber.toString()}\nDate Of Flight: $startDate\n\nFROM: ${plan.departureAirportName}\n\nTO: ${plan.arrivalAirportName}\n\nFlight departs at $departureTime"),
+        subtitle: const Text(''),
       ),
     );
   }

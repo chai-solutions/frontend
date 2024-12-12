@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 class MainPageScaffold extends StatelessWidget {
   final String? title;
   final Widget child;
+  final bool enableBackButton;
 
   const MainPageScaffold({
     required this.title,
     required this.child,
+    this.enableBackButton = true,
     super.key,
   });
 
@@ -32,6 +34,25 @@ class MainPageScaffold extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
+                        Positioned(
+                          top: 16.0,
+                          left: 16.0,
+                          child: enableBackButton
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (context.canPop()) {
+                                      context.pop();
+                                    } else {
+                                      context.go('/home');
+                                    }
+                                  },
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                         Positioned(
                           bottom: 16.0,
                           child: Align(
