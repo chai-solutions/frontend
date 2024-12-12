@@ -29,30 +29,28 @@ class ViewFlightPlan extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0.0,
-                  ),
-                  //button to go back home
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      if (context.mounted) {
-                        context.go('/home');
-                      }
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                    label: const Text('Back Home'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.white, // Set the background color to white
-                    ),
-                  ),
-                ),
                 GSButton(
                   onPressed: () {
                     context.go('/editPlanHome/$planID');
                   },
                   text: 'Add Flight',
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius:
+                        BorderRadius.circular(8.0), // Adjust radius as needed
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      _confirmDeletion(context, ref);
+                    },
+                    child: const Text(
+                      'Permanently Delete Plan',
+                      style: TextStyle(
+                          color: Colors.white), // Text color for contrast
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -73,24 +71,6 @@ class ViewFlightPlan extends ConsumerWidget {
               ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius:
-                  BorderRadius.circular(8.0), // Adjust radius as needed
-            ),
-            child: TextButton(
-              onPressed: () {
-                _confirmDeletion(context, ref);
-                // context.go('/areYouSureDelPlan/$planID');
-              },
-              child: const Text(
-                'Permanently Delete Plan',
-                style:
-                    TextStyle(color: Colors.white), // Text color for contrast
-              ),
-            ),
-          )
         ],
       ),
     );

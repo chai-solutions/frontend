@@ -34,6 +34,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
     return MainPageScaffold(
       title: name != null ? 'Welcome, $name!' : null,
+      enableBackButton: false,
       child: const FlightPlanList(),
     );
   }
@@ -105,8 +106,9 @@ class FlightPlanList extends ConsumerWidget {
         ),
       );
     }
-    // Create a Set to store unique plan IDs
+
     Set<int> uniquePlanIds = {};
+
     return Expanded(
       child: ListView.builder(
         itemCount: plans.where((plan) => uniquePlanIds.add(plan.id)).length,
