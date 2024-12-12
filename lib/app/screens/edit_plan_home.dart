@@ -22,7 +22,7 @@ class EditPlanHome extends ConsumerWidget {
             child: ElevatedButton.icon(
               onPressed: () async {
                 if (context.mounted) {
-                  context.go('/addDeleteFlight/$inputPlanId');
+                  context.push('/viewFlightPlan/$inputPlanId');
                 }
               },
               icon: const Icon(Icons.arrow_back),

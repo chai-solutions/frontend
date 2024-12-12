@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class DeletePlan extends ConsumerWidget {
-  final int? inputPlanId;
+  final int inputPlanId;
 
-  DeletePlan({super.key, required this.inputPlanId});
-
-  final myController = TextEditingController();
+  const DeletePlan({super.key, required this.inputPlanId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,14 +21,13 @@ class DeletePlan extends ConsumerWidget {
             child: ElevatedButton.icon(
               onPressed: () async {
                 if (context.mounted) {
-                  context.go('/addDeleteFlight/$inputPlanId');
+                  context.push('/viewFlightPlan/$inputPlanId');
                 }
               },
               icon: const Icon(Icons.arrow_back),
               label: const Text('Back'),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the background color to white
+                backgroundColor: Colors.white,
               ),
             ),
           ),
