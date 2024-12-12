@@ -46,7 +46,7 @@ class ViewFlightPlan extends ConsumerWidget {
                       _confirmDeletion(context, ref);
                     },
                     child: const Text(
-                      'Permanently Delete Plan',
+                      'Delete Plan',
                       style: TextStyle(
                           color: Colors.white), // Text color for contrast
                     ),
@@ -81,8 +81,7 @@ class ViewFlightPlan extends ConsumerWidget {
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: const Text('Confirm'),
-        content: const Text(
-            'Do you really want to delete this flight from the plan?'),
+        content: const Text('Do you really want to delete this plan?'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
             isDefaultAction: true,

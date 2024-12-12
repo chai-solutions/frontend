@@ -116,7 +116,7 @@ class FlightStepInfo extends ConsumerWidget {
                     _confirmDelete(context, ref);
                   },
                   child: const Text(
-                    'Permanently Delete Plan',
+                    'Delete Flight',
                     style: TextStyle(
                         color: Colors.white), // Text color for contrast
                   ),
